@@ -1,6 +1,6 @@
 # LINFO2145 Repository
 
-Private repository for the students of LINFO2145 (Cloud Computing) of the class 2023-2024. Students should create a **private fork** of this repository and pull instructions when they are made available.
+Private repository for the students of LINFO2145 (Cloud Computing) of the class 2026-2027. Students should create a **private fork** of this repository and pull instructions when they are made available.
 
 ## Structure
 
@@ -13,10 +13,11 @@ Private repository for the students of LINFO2145 (Cloud Computing) of the class 
 | Week | Slides                                                                                          | Tutorials                                                                                                       |
 | ---- | ----------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
 | W1   | [Introduction](./slides/00-introduction.pdf) & [Virtualization](./slides/01-virtualization.pdf) | [How to setup virtual machines](./tutorials/01_VirtualMachines) & [containers](./tutorials/02_DockerContainers) |
+| W2   | [Platform-as-a-Service and service-oriented architectures](./slides/02-PaaS-SOA.pdf)            | [Project kickoff](./project/README.md)                                                                          |
 
 ## GitHub accesses and TA support
 
-Once you created your own private fork of this repository, don't forget to add **all teaching assistants** to your repository. Our GitHub usernames are :
+Once you have created your own private fork of this repository, don't forget to add **all teaching assistants** to your repository. Our GitHub usernames are :
 
 - Yinan Cao : _YinanTsao_
 - Paul-Edouard Bertrand Van Ouytsel : _PaulEdouardBertrandVO_

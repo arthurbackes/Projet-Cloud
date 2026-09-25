@@ -12,20 +12,20 @@ If you do **not** have an RSA key pair yet, you can create one by following the 
 
 ## Linux/MacOS
 
-On Linux/MacOS hosts, proceed as follow:
+On Linux/MacOS hosts, proceed as follows:
 
 1. Open a new terminal on your laptop;
 1. Use `ssh-keygen -t rsa -C ""`
 1. When you are asked to provide a file name, **just confirm the option by default**.
 
-This will produce two files: `rsa_key`, your private key, that you should never communicate to anyone, and `rsa_key.pub`, your public key.
+This will produce two files: `id_rsa`, your private key, that you should never communicate to anyone, and `id_rsa.pub`, your public key.
 On Mac OS and Linux, these files are by default in a hidden folder in your home directory (`~/.ssh/`).
 
 We want to add the public key to the authorized keys on the guest OS in the VM.
 Using the `multipass shell` utility, connect to your VM and proceed with the following:
 
 1. Open the file containing the authorized ssh keys `nano ~/.ssh/authorized_keys`
-2. Copy/paste the content of the public RSA key at the end of the file(don't remove the first key!!)
+2. Copy/paste the content of the public RSA key at the end of the file (don't remove the first key!!)
 
 :bulb:
 **Recall.** Press _Ctrl+O_, confirm the changes and leave the editor with _Ctrl+X_
@@ -34,7 +34,7 @@ In a new terminal, open another session into the VM OS using `ssh ubuntu@VM_IP_A
 
 ## Windows
 
-On Windows hosts, proceed as follow:
+On Windows hosts, proceed as follows:
 
 ### RSA Key generation with PuTTYgen
 
@@ -49,7 +49,7 @@ On Windows hosts, proceed as follow:
 
 ![puttygen](figs/puttygen-2.png)
 
-1. In the _key comment_ box, write down some info to remind you the purpose of the key (e.g.: linfo2145vm-rsa-key). It is good practice to also set a passphrase for accessing an RSA private key, but for the purpose of this tutorial, you can leave the field empty.
+1. In the _key comment_ box, write down some info to remind you of the purpose of the key (e.g.: linfo2145vm-rsa-key). It is good practice to also set a passphrase for accessing an RSA private key, but for the purpose of this tutorial, you can leave the field empty.
 1. Click on _Save private key_.
 1. Copy the content in the box under _Key / Public key for pasting into OpenSSH authorized_keys file_: this is the public key you should be using. Make sure you copy all the content!
 
@@ -57,11 +57,11 @@ On Windows hosts, proceed as follow:
 
 ### Add public key to guest VM
 
-To configure the public key into your VM, proceed as follow:
+To configure the public key into your VM, proceed as follows:
 
 1. Login in your VM using the `multipass shell` utility.
 2. Open the file containing the authorized ssh keys `nano ~/.ssh/authorized_keys`
-3. Copy/paste the content of the public RSA key at the end of the file(don't remove the first key!!)
+3. Copy/paste the content of the public RSA key at the end of the file (don't remove the first key!!)
 4. Save the file and exit the editor.
 5. Logout the current SSH connection.
 

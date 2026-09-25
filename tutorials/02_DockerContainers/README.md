@@ -22,9 +22,9 @@ This tutorial requires you to complete some exercises that are tagged with this 
 In the [previous tutorial](../01_VirtualMachines/README.md#launching-multiple-vms), you created a VM and configured its OS to allow password-less SSH connections from your laptop.
 We will use this VM image in this tutorial. Follow these steps according to the situation that fits you:
 
-1. **I complete the tutorial about VMs and deploy Wordpress.** You will use the first VM (VM called: `myvm`) to install Docker. Remove the server MySQL as follows: `sudo apt-get remove mariadb-server`
-2. **I complete only the tutorial about VMs.** You will use the first VM (VM called: `myvm`) to install Docker.
-3. **I did not complete the tutorial about VMs,** Complete this first tutorial until the section where you create a second VM ([link here](../01_VirtualMachines/README.md#launching-multiple-vms)).
+1. **I completed the tutorial about VMs and deployed Wordpress.** You will use the first VM (VM called: `myvm`) to install Docker. Remove the server MySQL as follows: `sudo apt-get remove mariadb-server`
+2. **I completed only the tutorial about VMs.** You will use the first VM (VM called: `myvm`) to install Docker.
+3. **I did not complete the tutorial about VMs.** Complete this first tutorial until the section where you create a second VM ([link here](../01_VirtualMachines/README.md#launching-multiple-vms)).
 
 :pencil2: Start the VM `myvm` and connect to it using SSH.
 
@@ -96,7 +96,7 @@ Running `docker run hello-world` instructs the Docker daemon to:
 
     :bulb: You can confirm that the `hello-world` image is now stored in local with `docker images`.
 
-1. Create a container (instance of an image) and execute a command therein. As mention before, in this case the command calls a script that prints a welcome message.
+1. Create a container (instance of an image) and execute a command therein. As mentioned before, in this case the command calls a script that prints a welcome message.
 
 1. The execution of the container stops when the called command returns.
 
@@ -151,7 +151,7 @@ You can also consult the [description of base commands](https://docs.docker.com/
 
 ## Deploying Wordpress with Docker
 
-We will see how to use Docker to deploy WordPress, just as we did in the first tutorial second part but in a simpler and more programmatic manner (note: You should follow this section even if you did not complete the second part of the first tutorial).
+We will see how to use Docker to deploy WordPress, just as we did in the second part of the first tutorial but in a simpler and more programmatic manner (note: You should follow this section even if you did not complete the second part of the first tutorial).
 
 Instead of deploying services on guest OSs (as seen in tutorial 1), we will now have one container running a MySQL server and a second container hosting a Web server with Wordpress.
 
@@ -178,7 +178,7 @@ Any environment variable set in a Dockerfile is available in its container.
 :pencil2: **Exercise.**
 Create an image using the previous Dockerfile and name it `web-db`.
 
-Once you create the `web-db` image you may run a new container out of it with `docker run --name web-db-container -d web-db` -- the option `--name` gives a name a container and  the `-d` flag tells docker to run it in the background.
+Once you create the `web-db` image you may run a new container out of it with `docker run --name web-db-container -d web-db` -- the option `--name` gives a name to the container and  the `-d` flag tells docker to run it in the background.
 
 :pencil2: **Exercises.**
 

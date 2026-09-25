@@ -101,9 +101,9 @@ Name                    State             IPv4             Image
 myvm                    Running           10.75.234.25     Ubuntu 26.04 LTS
 ```
 
-### Create a custom hardware requirement
+### Create a VM with custom hardware
 
-It is easy to create Ubuntu VMs with custom hardware requirement with the following flags: `--cpus, --disk, --memory`
+It is easy to create Ubuntu VMs with custom hardware requirements with the following flags: `--cpus, --disk, --memory`
 
 ```bash
 # creates a custom VM
@@ -129,7 +129,7 @@ Now that we have set up one VM with a minimalistic guest OS, we want to be able 
 
 ### Cloud-init
 
-The manual configuration of multiple identical VM can quickly become cumbersome. Thankfully, we are lazy computer scientists and we would like to automate some of the boring operations we just did, like copying our RSA key.
+The manual configuration of multiple identical VMs can quickly become cumbersome. Thankfully, we are lazy computer scientists and we would like to automate some of the boring operations we just did, like copying our RSA key.
 
 The way to do this with Multipass is to create what is called a [**`cloud-init`**](https://cloudinit.readthedocs.io/en/latest/topics/examples.html) containing instructions of operations to be performed on a newly created VM, like install packages with `apt-get install`, modify some files, configure network interfaces, create new users, ...
 
@@ -152,5 +152,5 @@ ssh_authorized_keys:
 
 ## Final comments
 
-:checkered_flag: **Congrats, you complete your first tutorial.**
+:checkered_flag: **Congrats, you completed your first tutorial.**
 You learned how to deploy a virtual infrastructure with some VMs and set up a connection (via SSH) to the guest OSs from your laptop. You may want to make use of this infrastructure for deploying an application. As an additional exercise, [this tutorial](DeployWebApp.md) shows you how to deploy a Web hosting service on your virtual infrastructure.

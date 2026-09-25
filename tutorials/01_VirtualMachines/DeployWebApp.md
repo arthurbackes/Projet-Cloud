@@ -3,7 +3,7 @@
 **LINFO2145 Autumn, 2026** -- _Etienne Rivière, Paul-Edouard Bertrand Van Ouytsel, Yinan Cao, Clément Delzotti and Rémi Van Boxem_
 
 :warning:
-This tutorial assumes that you have followed the previous tutorial and and succeeded the creation of 2 Virtual Machines (VMs). If this is not the case, complete the tutorial about virtual machines ([link here](README.md)).
+This tutorial assumes that you have followed the previous tutorial and succeeded in creating 2 Virtual Machines (VMs). If this is not the case, complete the tutorial about virtual machines ([link here](README.md)).
 
 ## Objective
 
@@ -59,7 +59,7 @@ MariaDB does not allow remote access by default, but we need to access its datab
 
 1. Open the configuration file of MariaDB with: `sudo nano /etc/mysql/mariadb.cnf`;
 
-2. Append the content below; this configuration instructs the deamon of MariaDB to use _127.0.0.1_ (localhost) as the address to expose (and not a fixed IP).
+2. Append the content below; this configuration instructs the daemon of MariaDB to use _127.0.0.1_ (localhost) as the address to expose (and not a fixed IP).
 
 ```conf
 [mysqld]
@@ -90,11 +90,11 @@ The authentication information of such a user is as follows: `username/password=
 
 Apply the previous configuration with: `cat wp.sql | sudo mysql`
 
-Check that the _wordpress_ database has been created by list all available databases with: `sudo mysql -e "show databases"`
+Check that the _wordpress_ database has been created by listing all available databases with: `sudo mysql -e "show databases"`
 
 ## Setting up the web host
 
-We are now ready to start the configuration of a Web server. WordPress requires the following packets: `wordpress`, `curl` and `apache2`.
+We are now ready to start the configuration of a Web server. WordPress requires the following packages: `wordpress`, `curl` and `apache2`.
 
 :warning: **Note.**
 Be sure to perform every step on this section in the guest OS `web-service`.
