@@ -14,6 +14,8 @@ Private repository for the students of LINFO2145 (Cloud Computing) of the class 
 | ---- | ----------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
 | W1   | [Introduction](./slides/00-introduction.pdf) & [Virtualization](./slides/01-virtualization.pdf) | [How to setup virtual machines](./tutorials/01_VirtualMachines) & [containers](./tutorials/02_DockerContainers) |
 | W2   | [Platform-as-a-Service and service-oriented architectures](./slides/02-PaaS-SOA.pdf)            | [Project kickoff](./project/README.md)                                                                          |
+| W3   | [Storage and Data Management](slides/03-Storage.pdf)                                            | Project setup check                                                                                             |
+| W4   | [Elasticity and Energy](slides/04-Elasticity-Green.pdf)                                         | [DB](project/practicals/04_NoSQL_databases.md)                                                                  |
 
 ## GitHub accesses and TA support
 
