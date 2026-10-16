@@ -16,6 +16,7 @@ Private repository for the students of LINFO2145 (Cloud Computing) of the class 
 | W2   | [Platform-as-a-Service and service-oriented architectures](./slides/02-PaaS-SOA.pdf)            | [Project kickoff](./project/README.md)                                                                          |
 | W3   | [Storage and Data Management](slides/03-Storage.pdf)                                            | Project setup check                                                                                             |
 | W4   | [Elasticity and Energy](slides/04-Elasticity-Green.pdf)                                         | [DB](project/practicals/04_NoSQL_databases.md)                                                                  |
+| W5   | [Fault tolerance and consistency](slides/05-FaultTolerance-Consistency.key.pdf)                                         | [Elasticity](project/practicals/05_ElasticScaling.md)                                                                  |
 
 ## GitHub accesses and TA support
 
