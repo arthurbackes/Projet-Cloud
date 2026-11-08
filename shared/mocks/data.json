@@ -1,19 +1,19 @@
 {
   "login": {
-    "email": "user@scapp.com",
-    "password": "password123"
+    "username": "user",
+    "password": "password"
   },
   "users": [
     {
       "id": "u1",
-      "email": "admin@scapp.com",
-      "password": "adminpassword",
+      "username": "admin",
+      "passwordHash": "$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy",
       "role": "admin"
     },
     {
       "id": "u2",
-      "email": "user@scapp.com",
-      "password": "password123",
+      "username": "user",
+      "passwordHash": "$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy",
       "role": "user"
     }
   ],

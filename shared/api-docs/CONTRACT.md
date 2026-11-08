@@ -2,37 +2,76 @@
 
 Ce document définit les routes de l'API, les formats de requêtes attendus par le serveur et les réponses renvoyées au client.
 
-**Note générale sur l'authentification :** 
-Toutes les routes (sauf la connexion et la consultation des produits) nécessitent d'envoyer le jeton JWT dans les en-têtes de la requête :
+**Note générale sur l'authentification :**
+Toutes les routes (sauf l'inscription, la connexion et la consultation des
+produits) nécessitent d'envoyer le jeton JWT dans les en-têtes de la requête :
 `Authorization: Bearer <token>`
 
 ---
 
 ## 1. Authentification (Auth)
 
-### Connexion d'un utilisateur
-*   **Route :** `POST /api/auth/login`
+Le service d'authentification utilise `username` comme identifiant. Les mots de
+passe sont envoyés dans le corps JSON des requêtes et ne doivent jamais être
+placés dans une URL.
+
+### Inscription d'un utilisateur
+*   **Route :** `POST /user`
 *   **Body attendu :**
     ```json
     {
-      "email": "user@email.com",
+      "username": "alice",
+      "password": "password123"
+    }
+    ```
+*   **Réponse Succès (`201 Created`) :**
+    ```json
+    {
+      "status": "success",
+      "token": "eyJhbGciOiJIUzI1NiIs...",
+      "user": {
+        "username": "alice",
+        "role": "user"
+      }
+    }
+    ```
+*   **Erreurs possibles :**
+    *   `400 Bad Request` : Données manquantes ou invalides.
+    *   `409 Conflict` : Nom d'utilisateur déjà utilisé.
+
+### Connexion d'un utilisateur
+*   **Route :** `POST /user/login`
+*   **Body attendu :**
+    ```json
+    {
+      "username": "alice",
       "password": "password123"
     }
     ```
 *   **Réponse Succès (`200 OK`) :**
     ```json
     {
+      "status": "success",
       "token": "eyJhbGciOiJIUzI1NiIs...",
       "user": {
-        "id": "u2",
-        "email": "user@email.com",
+        "username": "alice",
         "role": "user"
       }
     }
     ```
 *   **Erreurs possibles :**
-    *   `401 Unauthorized` : Email ou mot de passe incorrect.
     *   `400 Bad Request` : Données manquantes.
+    *   `401 Unauthorized` : Nom d'utilisateur inconnu ou mot de passe incorrect.
+
+### Vérification d'identité et de rôle
+Les autres services réutilisent le middleware d'authentification fourni par le
+service users. Il vérifie le JWT envoyé dans `Authorization: Bearer <token>` et
+expose `username` et `role` à la requête. Un middleware de rôle peut ensuite
+refuser l'accès aux routes réservées aux administrateurs avec `403 Forbidden`.
+
+Le JWT contient au minimum `sub`, `role`, `iat` et `exp`. Le secret de signature
+est fourni par la variable d'environnement `TOKEN_SECRET` et ne doit pas être
+codé dans le dépôt.
 
 ---
 
