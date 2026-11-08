@@ -1,0 +1,471 @@
+<!doctype html>
+<html lang="fr">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Guide visuel du projet SCApp de LINFO2145 : objectifs, technologies, notions et ressources.">
+  <title>SCApp Handbook | LINFO2145</title>
+  <style>
+    :root {
+      --ink: #17212b;
+      --muted: #64727c;
+      --paper: #f7f4ed;
+      --panel: #fffdf8;
+      --line: #ded8cb;
+      --navy: #183248;
+      --teal: #167c80;
+      --coral: #d9654f;
+      --yellow: #f0c967;
+      --shadow: 0 18px 45px rgba(24, 50, 72, .10);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+      font: 16px/1.6 Georgia, 'Times New Roman', serif;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      opacity: .35;
+      background-image: linear-gradient(90deg, rgba(22,124,128,.04) 1px, transparent 1px), linear-gradient(rgba(22,124,128,.04) 1px, transparent 1px);
+      background-size: 32px 32px;
+      pointer-events: none;
+    }
+    a { color: var(--teal); font-weight: 700; }
+    a:hover { color: var(--coral); }
+    h1, h2, h3, nav, button, .eyebrow, .tag, .meta, .progress-label, .resource-type {
+      font-family: 'Trebuchet MS', Arial, sans-serif;
+    }
+    h1, h2, h3 { line-height: 1.12; margin: 0 0 .7rem; }
+    h2 { font-size: clamp(1.7rem, 3vw, 2.45rem); }
+    h3 { font-size: 1.12rem; }
+    p { margin: .55rem 0 1rem; }
+    .layout { display: grid; grid-template-columns: 280px minmax(0, 1fr); min-height: 100vh; }
+    .sidebar {
+      position: sticky; top: 0; height: 100vh; padding: 28px 22px;
+      color: #f8f6ef; background: var(--navy); overflow-y: auto;
+    }
+    .brand { display: flex; gap: 12px; align-items: center; margin-bottom: 32px; }
+    .brand-mark { display: grid; place-items: center; width: 43px; height: 43px; color: var(--navy); background: var(--yellow); border-radius: 12px 12px 12px 3px; font: 800 1.2rem 'Trebuchet MS', sans-serif; }
+    .brand strong { display: block; font: 800 1.08rem 'Trebuchet MS', sans-serif; }
+    .brand small { color: #b6c8cb; }
+    .nav-title { margin: 26px 0 10px; color: #a7bfc1; text-transform: uppercase; letter-spacing: .12em; font: 700 .7rem 'Trebuchet MS', sans-serif; }
+    .sidebar nav a { display: block; padding: 9px 11px; color: #e6eeee; border-left: 2px solid transparent; text-decoration: none; font-size: .94rem; }
+    .sidebar nav a:hover, .sidebar nav a.active { color: #fff; background: rgba(255,255,255,.09); border-left-color: var(--yellow); }
+    .main { width: min(1180px, 100%); margin: 0 auto; padding: 34px clamp(20px, 5vw, 68px) 80px; }
+    .hero { display: grid; grid-template-columns: 1.3fr .7fr; gap: 35px; align-items: end; min-height: 390px; padding: 42px 0 45px; }
+    .eyebrow { color: var(--coral); font-size: .78rem; font-weight: 800; letter-spacing: .15em; text-transform: uppercase; }
+    .hero h1 { max-width: 760px; color: var(--navy); font-size: clamp(2.8rem, 7vw, 6.7rem); letter-spacing: -.06em; }
+    .hero h1 span { color: var(--teal); }
+    .hero-lead { max-width: 650px; color: #43535d; font-size: clamp(1.08rem, 1.6vw, 1.35rem); }
+    .hero-note { padding: 23px; color: #fff; background: var(--coral); box-shadow: var(--shadow); border-radius: 3px 22px 3px 22px; transform: rotate(1.5deg); }
+    .hero-note strong { display: block; margin-bottom: 7px; font: 800 1rem 'Trebuchet MS', sans-serif; }
+    .hero-note p { margin: 0; }
+    .section { scroll-margin-top: 24px; padding: 55px 0 12px; }
+    .section-heading { display: flex; justify-content: space-between; gap: 20px; align-items: end; margin-bottom: 22px; border-bottom: 1px solid var(--line); padding-bottom: 13px; }
+    .section-heading p { max-width: 600px; margin: 0; color: var(--muted); }
+    .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+    .card { padding: 22px; background: rgba(255,253,248,.88); border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 8px 24px rgba(24,50,72,.04); }
+    .card p:last-child { margin-bottom: 0; }
+    .card .icon { display: block; margin-bottom: 15px; color: var(--coral); font: 800 1.55rem 'Trebuchet MS', sans-serif; }
+    .tag { display: inline-block; margin: 3px 3px 3px 0; padding: 4px 8px; color: var(--navy); background: #e2eeee; border-radius: 2px; font-size: .72rem; font-weight: 800; }
+    .status { display: inline-flex; gap: 6px; align-items: center; color: var(--coral); font: 700 .76rem 'Trebuchet MS', sans-serif; text-transform: uppercase; letter-spacing: .08em; }
+    .status::before { content: ''; width: 7px; height: 7px; background: currentColor; border-radius: 50%; }
+    .architecture { display: grid; grid-template-columns: 1fr 1.4fr 1fr; gap: 10px; align-items: center; }
+    .architecture .node { min-height: 112px; display: grid; place-items: center; text-align: center; padding: 18px 12px; border: 2px solid var(--teal); background: #edf6f2; border-radius: 6px; font-family: 'Trebuchet MS', sans-serif; font-weight: 800; }
+    .architecture .center { display: grid; gap: 9px; }
+    .architecture .center .node { min-height: 0; padding: 12px; border-color: var(--coral); background: #fff0e9; }
+    .arrow { color: var(--coral); text-align: center; font: 800 1.5rem 'Trebuchet MS', sans-serif; }
+    .steps { counter-reset: step; display: grid; gap: 10px; }
+    .step { display: grid; grid-template-columns: 43px 1fr; gap: 16px; padding: 18px; border: 1px solid var(--line); background: var(--panel); }
+    .step::before { counter-increment: step; content: counter(step); display: grid; place-items: center; width: 37px; height: 37px; color: white; background: var(--teal); border-radius: 50%; font: 800 1rem 'Trebuchet MS', sans-serif; }
+    .step h3 { margin-bottom: 3px; }
+    .step p { margin: 0; color: var(--muted); }
+    .checklist { display: grid; gap: 9px; }
+    .check-item { display: flex; gap: 12px; align-items: flex-start; padding: 13px 15px; background: var(--panel); border: 1px solid var(--line); }
+    .check-item input { width: 19px; height: 19px; margin-top: 3px; accent-color: var(--teal); }
+    .check-item.done span { color: var(--muted); text-decoration: line-through; }
+    .progress { margin: 10px 0 20px; padding: 15px 18px; background: var(--navy); color: white; }
+    .progress-top { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
+    .progress-label { font-size: .78rem; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; }
+    .bar { height: 8px; background: #536978; border-radius: 20px; overflow: hidden; }
+    .bar span { display: block; width: 0; height: 100%; background: var(--yellow); transition: width .3s ease; }
+    .resource-tools { display: flex; gap: 10px; margin-bottom: 16px; }
+    .resource-tools input { width: min(100%, 430px); padding: 12px 14px; border: 1px solid var(--line); background: var(--panel); color: var(--ink); font: inherit; }
+    .resources { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .resource { display: flex; gap: 15px; padding: 17px; background: var(--panel); border: 1px solid var(--line); }
+    .resource-type { flex: 0 0 42px; display: grid; place-items: center; height: 42px; color: white; background: var(--coral); font-size: .66rem; font-weight: 800; }
+    .resource h3 { margin-bottom: 3px; font-size: 1rem; }
+    .resource p { margin: 0 0 5px; color: var(--muted); font-size: .92rem; }
+    .resource a { font: 700 .85rem 'Trebuchet MS', sans-serif; }
+    .sprint-rules { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-bottom: 22px; }
+    .sprint-rules > div { display: grid; gap: 5px; padding: 16px; color: #eaf3f1; background: var(--navy); border-top: 4px solid var(--yellow); }
+    .sprint-rules strong, .task-card h3, .sprint-title h3, .anti-blocking h3 { font-family: 'Trebuchet MS', Arial, sans-serif; }
+    .sprint-rules strong { color: var(--yellow); font-size: .95rem; }
+    .sprint-rules span { color: #c6d6d6; font-size: .9rem; }
+    .sprint-block { margin-top: 26px; padding: 22px; background: rgba(255,253,248,.72); border: 1px solid var(--line); }
+    .sprint-title { display: flex; justify-content: space-between; gap: 18px; align-items: end; padding-bottom: 13px; border-bottom: 2px solid var(--navy); }
+    .sprint-title strong { color: var(--coral); font: 800 .85rem 'Trebuchet MS', sans-serif; white-space: nowrap; }
+    .sprint-kicker { color: var(--teal); font: 800 .72rem 'Trebuchet MS', sans-serif; letter-spacing: .14em; text-transform: uppercase; }
+    .sprint-title h3 { margin: 3px 0 0; color: var(--navy); font-size: 1.55rem; }
+    .sprint-goal { margin: 15px 0 18px; color: #43535d; }
+    .task-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .task-card { padding: 18px; background: var(--panel); border: 1px solid var(--line); border-left: 5px solid var(--teal); }
+    .task-card.nathan { border-left-color: var(--coral); }
+    .task-head { display: flex; justify-content: space-between; gap: 12px; align-items: center; margin-bottom: 12px; }
+    .owner, .date { font: 800 .7rem 'Trebuchet MS', sans-serif; letter-spacing: .1em; }
+    .owner { padding: 4px 7px; color: white; background: var(--teal); }
+    .nathan .owner { background: var(--coral); }
+    .date { color: var(--muted); }
+    .task-card h3 { color: var(--navy); font-size: 1.05rem; }
+    .task-card p { color: #4a5860; font-size: .93rem; }
+    .task-card code { padding: 1px 4px; background: #eaf0ed; font-size: .82em; }
+    .task-resources { display: flex; flex-wrap: wrap; gap: 7px; padding-top: 7px; }
+    .task-resources a { padding: 4px 7px; color: var(--teal); background: #e7f1ee; font: 700 .72rem 'Trebuchet MS', sans-serif; text-decoration: none; }
+    .task-resources a:hover { color: white; background: var(--coral); }
+    .integration { display: grid; gap: 4px; margin-top: 15px; padding: 15px 17px; color: #eaf3f1; background: var(--teal); }
+    .integration strong { color: var(--yellow); font: 800 .84rem 'Trebuchet MS', sans-serif; }
+    .integration span { font-size: .94rem; }
+    .integration code { color: var(--navy); background: var(--yellow); padding: 2px 5px; font-size: .82em; }
+    .anti-blocking { margin-top: 22px; padding: 21px; background: #fff0e9; border: 1px solid #e8b3a5; }
+    .anti-blocking h3 { color: var(--coral); font-size: 1.2rem; }
+    .anti-blocking ol { margin: 0; padding-left: 21px; }
+    .anti-blocking li { margin: 8px 0; color: #4b5355; }
+    details { background: var(--panel); border: 1px solid var(--line); }
+    details + details { margin-top: 9px; }
+    summary { cursor: pointer; padding: 16px 18px; color: var(--navy); font: 800 1rem 'Trebuchet MS', sans-serif; }
+    details p, details ul { margin: 0; padding: 0 20px 17px 38px; }
+    footer { margin-top: 60px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--muted); font-size: .9rem; }
+    @media (max-width: 850px) {
+      .layout { display: block; }
+      .sidebar { position: static; height: auto; padding: 18px 20px; }
+      .sidebar nav { display: flex; flex-wrap: wrap; gap: 4px; }
+      .nav-title { width: 100%; margin-top: 16px; }
+      .sidebar nav a { padding: 7px 9px; border-left: 0; border-bottom: 2px solid transparent; }
+      .sidebar nav a:hover, .sidebar nav a.active { border-bottom-color: var(--yellow); }
+      .hero { grid-template-columns: 1fr; min-height: auto; padding-top: 35px; }
+      .hero-note { max-width: 520px; }
+      .grid, .resources, .sprint-rules { grid-template-columns: 1fr 1fr; }
+      .task-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 570px) {
+      .main { padding-inline: 16px; }
+      .hero h1 { font-size: 3.45rem; }
+      .grid, .resources, .architecture, .sprint-rules { grid-template-columns: 1fr; }
+      .architecture .arrow { transform: rotate(90deg); }
+      .sprint-block { padding: 15px; }
+      .sprint-title { align-items: start; flex-direction: column; gap: 6px; }
+      .section { padding-top: 38px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">SC</div>
+        <div><strong>SCApp Handbook</strong><small>LINFO2145 · 2026</small></div>
+      </div>
+      <nav aria-label="Navigation du guide">
+        <div class="nav-title">Comprendre</div>
+        <a href="#start">Le projet</a>
+        <a href="#existant">Ce qui existe</a>
+        <a href="#architecture">Architecture</a>
+        <div class="nav-title">Construire</div>
+        <a href="#roadmap">Feuille de route</a>
+        <a href="#sprints">Plan des sprints</a>
+        <a href="#outils">Outils à connaître</a>
+        <a href="#checklist">Checklist</a>
+        <div class="nav-title">Apprendre</div>
+        <a href="#ressources">Ressources</a>
+        <a href="#glossaire">Glossaire</a>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <header class="hero" id="start">
+        <div>
+          <div class="eyebrow">Guide de survie du groupe</div>
+          <h1>Construire la boutique dans le <span>Cloud.</span></h1>
+          <p class="hero-lead">SCApp est une boutique en ligne dont l'interface existe déjà. Votre mission est de lui donner un vrai back-end : des données persistantes, des services séparés, du déploiement et la capacité de grandir.</p>
+          <p><span class="tag">Projet à deux développeurs</span><span class="tag">Rendu : 23 novembre 2026</span><span class="tag">Node.js + Docker + Azure</span></p>
+        </div>
+        <div class="hero-note"><strong>La question à garder en tête</strong><p>Que se passe-t-il si l'utilisateur ferme son navigateur, revient demain ou se connecte depuis un autre appareil ? Les données doivent toujours être là.</p></div>
+      </header>
+
+      <section class="section" id="existant">
+        <div class="section-heading"><div><div class="eyebrow">Point de départ</div><h2>Ce que le dépôt contient déjà</h2></div><p>Le prototype permet de voir le produit final. Il ne faut pas tout réécrire : il faut progressivement remplacer ses données locales par des appels au Cloud.</p></div>
+        <div class="grid">
+          <article class="card"><span class="icon">01 / Interface</span><h3>Une boutique Svelte</h3><p>Catalogue, pages de connexion, panier, paiement et administration sont déjà représentés dans l'interface.</p><span class="status">fourni, à connecter</span></article>
+          <article class="card"><span class="icon">02 / Service</span><h3>Une première authentification</h3><p>Le service Node.js avec Express sait inscrire et connecter un utilisateur. Il faut le rendre persistant et mieux l'intégrer.</p><span class="status">base pédagogique</span></article>
+          <article class="card"><span class="icon">03 / Stockage</span><h3>Docker et CouchDB</h3><p>Les fichiers de départ montrent comment lancer les conteneurs et comment brancher un service sur une base de documents JSON.</p><span class="status">à étendre</span></article>
+        </div>
+        <p style="margin-top:18px">Repères dans le dépôt : <a href="project/src/front-end/">front-end</a> · <a href="project/src/back-end/users/">service utilisateurs</a> · <a href="project/src/back-end/storage/">CouchDB</a> · <a href="project/README.md">consigne complète</a></p>
+      </section>
+
+      <section class="section" id="architecture">
+        <div class="section-heading"><div><div class="eyebrow">La grande image</div><h2>Comment les pièces vont travailler ensemble</h2></div><p>Chaque service possède une responsabilité claire et sa propre base. Les images font exception : elles vont dans Azure Storage.</p></div>
+        <div class="architecture">
+          <div class="node">Interface web<br><small>Svelte</small></div>
+          <div class="center"><div class="arrow">→ API Gateway →</div><div class="node">Services REST indépendants<br><small>utilisateurs · produits · panier · achats · logs · recommandations</small></div><div class="arrow">↕ réseau Docker</div></div>
+          <div class="node">Bases CouchDB<br><small>une base par service</small></div>
+        </div>
+        <div class="grid" style="margin-top:16px"><article class="card"><h3>Les données</h3><p>Comptes, produits, paniers, achats et logs sont conservés côté serveur. Un navigateur ne doit plus être la seule mémoire de l'application.</p></article><article class="card"><h3>Les images</h3><p>Les photos de produits sont envoyées vers Azure Storage. La base conserve surtout le lien vers l'image.</p></article><article class="card"><h3>La montée en charge</h3><p>On doit pouvoir ajouter des instances d'un service sans devoir tout redéployer, puis tester ce comportement avec Docker Swarm.</p></article></div>
+      </section>
+
+      <section class="section" id="roadmap">
+        <div class="section-heading"><div><div class="eyebrow">Du prototype au rendu</div><h2>La feuille de route</h2></div><p>Suivez cet ordre : chaque étape donne une base concrète pour la suivante.</p></div>
+        <div class="steps">
+          <article class="step"><div><h3>Faire tourner la base</h3><p>Lancer le front-end, le service d'authentification et CouchDB avec Docker. Tester les échanges avec le navigateur et <code>curl</code>.</p></div></article>
+          <article class="step"><div><h3>Stabiliser les utilisateurs</h3><p>Stocker les comptes dans CouchDB, gérer les rôles, vérifier les jetons et connecter inscription et connexion au service.</p></div></article>
+          <article class="step"><div><h3>Construire catalogue, panier et achats</h3><p>Créer les API REST, leurs bases et les appels depuis Svelte. Vérifier qu'un changement reste visible après une reconnexion.</p></div></article>
+          <article class="step"><div><h3>Ajouter l'administration et les images</h3><p>Protéger l'interface admin, permettre la gestion des produits et envoyer les images vers Azure Storage.</p></div></article>
+          <article class="step"><div><h3>Observer et recommander</h3><p>Centraliser les logs, mesurer les temps de réponse et créer les vues Map/Reduce qui servent les recommandations.</p></div></article>
+          <article class="step"><div><h3>Déployer et prouver</h3><p>Assembler les services dans Docker Swarm, tester plusieurs instances, préparer Azure, documenter et présenter les choix.</p></div></article>
+        </div>
+      </section>
+
+      <section class="section" id="sprints">
+        <div class="section-heading"><div><div class="eyebrow">Organisation du groupe</div><h2>Deux sprints, zéro attente</h2></div><p>Planning proposé du <strong>9 au 23 novembre 2026</strong>. Les tâches sont parallèles dès que possible : les contrats, les mocks et les données de test servent de pont entre vos deux travaux.</p></div>
+
+        <div class="sprint-rules">
+          <div><strong>Rôles proposés</strong><span>Toi : socle back-end, données, observabilité et déploiement.</span><span>Nathan : intégration Svelte, admin, expérience utilisateur et validation front.</span></div>
+          <div><strong>Règle de non-blocage</strong><span>Une tâche qui appelle un autre service doit d'abord utiliser le contrat JSON et un mock local. Elle ne dépend donc pas de la fin de l'implémentation réelle.</span></div>
+          <div><strong>Rituels courts</strong><span>Point de 15 minutes chaque jour à 9h30. Partage de code ou PR à 17h30. Aucun changement de format d'API après le 10 novembre sans accord des deux.</span></div>
+        </div>
+
+        <div class="sprint-block">
+          <div class="sprint-title"><div><span class="sprint-kicker">Sprint 1</span><h3>Socle fonctionnel et contrats</h3></div><strong>9 → 15 novembre</strong></div>
+          <p class="sprint-goal"><strong>Objectif de sortie :</strong> un utilisateur peut s'inscrire, se connecter, voir un catalogue chargé par API, et l'équipe peut relancer toute la stack locale avec une seule procédure documentée.</p>
+          <div class="task-grid">
+            <article class="task-card yours">
+              <div class="task-head"><span class="owner">TOI</span><span class="date">9-10 nov.</span></div>
+              <h3>S1-A · Contrats d'API et données de référence</h3>
+              <p><strong>À faire :</strong> définir dans un dossier partagé les routes, les paramètres, les réponses JSON et les codes d'erreur pour auth, produits, panier, achats et logs. Ajouter 8 produits de test, deux utilisateurs et un exemple de jeton. Fournir un fichier de mock que Nathan peut appeler sans attendre les services.</p>
+              <p><strong>Terminé quand :</strong> les deux personnes valident le document, chaque route possède un exemple de requête/réponse, et les mocks peuvent être lancés localement.</p>
+              <div class="task-resources"><a href="project/README.md">Consigne API</a><a target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=REST+API+HTTP+status+codes+JSON+tutorial">REST / HTTP / JSON</a></div>
+            </article>
+            <article class="task-card nathan">
+              <div class="task-head"><span class="owner">NATHAN</span><span class="date">9-10 nov.</span></div>
+              <h3>S1-B · Cartographie du front et couche API</h3>
+              <p><strong>À faire :</strong> repérer dans Svelte chaque accès à <code>localStorage</code>, <code>sessionStorage</code> et aux stores produits/cart/auth. Créer une petite couche de clients HTTP Axios avec des URLs configurables et des fonctions nommées, même si elles utilisent d'abord les mocks de S1-A.</p>
+              <p><strong>Terminé quand :</strong> les pages savent appeler une fonction de service au lieu de construire elles-mêmes les URLs, et le changement de mock vers une vraie URL se fait par variable d'environnement.</p>
+              <div class="task-resources"><a href="project/practicals/03_ProjectSetup_Microservices.md">Connexion Svelte/API</a><a target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=SvelteKit+stores+Axios+API+tutorial">Svelte stores + Axios</a></div>
+            </article>
+            <article class="task-card yours">
+              <div class="task-head"><span class="owner">TOI</span><span class="date">10-12 nov.</span></div>
+              <h3>S1-C · Authentification persistante</h3>
+              <p><strong>À faire :</strong> remplacer le dictionnaire en mémoire du service users par CouchDB, conserver les mots de passe hachés, gérer les doublons et produire un jeton vérifiable. Ajouter une vérification d'identité et de rôle réutilisable par les autres services. Ne pas mettre le mot de passe dans une URL de production.</p>
+              <p><strong>Terminé quand :</strong> inscription, connexion, mauvais mot de passe, utilisateur inconnu et redémarrage du conteneur sont testés avec <code>curl</code>. Les données restent disponibles après redémarrage.</p>
+              <div class="task-resources"><a href="project/practicals/02_ProjectSetup_AuthenticationService.md">Tutoriel Auth</a><a href="project/practicals/04_NoSQL_databases.md">Tutoriel CouchDB</a><a target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=JWT+authentication+Node.js+Express+tutorial">JWT / bcrypt</a></div>
+            </article>
+            <article class="task-card nathan">
+              <div class="task-head"><span class="owner">NATHAN</span><span class="date">10-12 nov.</span></div>
+              <h3>S1-D · Connexion du front à l'auth</h3>
+              <p><strong>À faire :</strong> brancher les pages register et login sur les routes validées. Stocker uniquement le jeton et les informations d'affichage utiles côté navigateur, afficher les erreurs, protéger les actions panier et admin dans l'interface, et prévoir un bouton de déconnexion.</p>
+              <p><strong>Terminé quand :</strong> un nouvel utilisateur peut s'inscrire, se déconnecter, se reconnecter après fermeture du navigateur et voir un message clair pour chaque erreur. Les appels peuvent encore cibler le mock si le service de Toi n'est pas disponible.</p>
+              <div class="task-resources"><a href="project/practicals/03_ProjectSetup_Microservices.md">Appel depuis Svelte</a><a target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=SvelteKit+form+submit+fetch+API+tutorial">Formulaires Svelte</a></div>
+            </article>
+            <article class="task-card yours">
+              <div class="task-head"><span class="owner">TOI</span><span class="date">11-13 nov.</span></div>
+              <h3>S1-E · Service catalogue et stack Docker locale</h3>
+              <p><strong>À faire :</strong> créer le service produits et sa base CouchDB séparée. Implémenter consultation de la liste, consultation par identifiant, création, modification et suppression avec contrôle admin. Ajouter le service et sa base au réseau Docker, avec variables d'environnement et script de démarrage.</p>
+              <p><strong>Terminé quand :</strong> les routes répondent aux exemples du contrat, les droits sont vérifiés côté serveur, les données survivent à un redémarrage, et Nathan peut les appeler avec son client front ou <code>curl</code>.</p>
+              <div class="task-resources"><a href="project/practicals/04_NoSQL_databases.md">CouchDB REST</a><a target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Node.js+Express+CRUD+REST+API+tutorial">Express CRUD</a><a target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Docker+Compose+multiple+containers+network+tutorial">Réseau Docker</a></div>
+            </article>
+            <article class="task-card nathan">
+              <div class="task-head"><span class="owner">NATHAN</span><span class="date">11-13 nov.</span></div>
+              <h3>S1-F · Catalogue front et états d'interface</h3>
+              <p><strong>À faire :</strong> remplacer le catalogue statique par le client produits, gérer chargement, erreur et catalogue vide, conserver les composants d'affichage existants, puis adapter l'ajout au panier pour envoyer un identifiant et une quantité plutôt qu'un objet local complet.</p>
+              <p><strong>Terminé quand :</strong> le catalogue se charge depuis le mock ou le service réel en changeant une URL, les erreurs sont visibles et aucun composant ne dépend directement de la structure interne de CouchDB.</p>
+              <div class="task-resources"><a href="project/practicals/01_ProjectSetup_FrontEnd.md">Structure du front</a><a target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Svelte+fetch+API+loading+error+states+tutorial">États de chargement</a></div>
+            </article>
+          </div>
+          <div class="integration"><strong>Point d'intégration · dimanche 15 novembre</strong><span>Démo commune : inscription → connexion → catalogue → détail produit. Tester en local avec les vrais services, puis refaire le même parcours avec les mocks si un service tombe. Livrable : tag Git <code>sprint-1-done</code> et une liste de bugs priorisés.</span></div>
+        </div>
+
+        <div class="sprint-block">
+          <div class="sprint-title"><div><span class="sprint-kicker">Sprint 2</span><h3>Parcours complet, Cloud et preuve</h3></div><strong>16 → 23 novembre</strong></div>
+          <p class="sprint-goal"><strong>Objectif de sortie :</strong> le parcours utilisateur complet fonctionne, l'administration est utilisable, les logs et recommandations existent, la stack est déployable et la documentation permet à une autre personne de la relancer.</p>
+          <div class="task-grid">
+            <article class="task-card yours">
+              <div class="task-head"><span class="owner">TOI</span><span class="date">16-18 nov.</span></div>
+              <h3>S2-A · Panier, achats et historique persistants</h3>
+              <p><strong>À faire :</strong> créer les services panier et achats avec une base par service. Utiliser l'identité du jeton pour isoler les données. Implémenter ajout, retrait, quantité, consultation du panier, validation d'achat et historique. Définir le comportement en cas de double validation ou de produit introuvable.</p>
+              <p><strong>Terminé quand :</strong> le panier et l'historique sont retrouvés depuis un autre navigateur, une erreur ne vide pas le panier, et un test couvre le parcours complet avec deux utilisateurs distincts.</p>
+              <div class="task-resources"><a href="project/README.md">Exigences panier/achat</a><a target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=distributed+systems+idempotency+payments+beginner">Idempotence</a><a target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=REST+API+authentication+authorization+JWT+tutorial">Autorisation</a></div>
+            </article>
+            <article class="task-card nathan">
+              <div class="task-head"><span class="owner">NATHAN</span><span class="date">16-18 nov.</span></div>
+              <h3>S2-B · Panier et checkout dans Svelte</h3>
+              <p><strong>À faire :</strong> remplacer le panier local et l'historique local par les clients API. Afficher les états chargement, vide, erreur et succès. Empêcher l'achat sans connexion, recharger le panier au démarrage et éviter les doubles clics lors de la validation.</p>
+              <p><strong>Terminé quand :</strong> l'interface fonctionne avec les mocks du contrat S2-A et avec les vrais services dès qu'ils sont disponibles. La quantité affichée, le total et l'historique correspondent aux réponses serveur.</p>
+              <div class="task-resources"><a href="project/practicals/03_ProjectSetup_Microservices.md">Appels front/back</a><a target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=SvelteKit+API+data+loading+states+tutorial">Données SvelteKit</a></div>
+            </article>
+            <article class="task-card yours">
+              <div class="task-head"><span class="owner">TOI</span><span class="date">16-19 nov.</span></div>
+              <h3>S2-C · Logs, mesures et recommandations</h3>
+              <p><strong>À faire :</strong> créer le service de logs avec CouchDB obligatoire. Définir un événement JSON commun : utilisateur, action, produit, service, date, durée, statut. Ajouter l'envoi asynchrone depuis les services. Créer une vue Map/Reduce qui compte les produits consultés ou achetés et exposer une route de recommandations.</p>
+              <p><strong>Terminé quand :</strong> une action réelle produit un log consultable, la durée d'une requête est présente, la vue retourne un résultat reproductible sur les données de test et l'API renvoie au moins trois recommandations ou un résultat vide propre.</p>
+              <div class="task-resources"><a href="project/README.md">Exigences logs</a><a href="project/practicals/04_NoSQL_databases.md">Vues CouchDB</a><a target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=CouchDB+MapReduce+views+recommendation+tutorial">Map/Reduce</a></div>
+            </article>
+            <article class="task-card nathan">
+              <div class="task-head"><span class="owner">NATHAN</span><span class="date">16-19 nov.</span></div>
+              <h3>S2-D · Administration et expérience complète</h3>
+              <p><strong>À faire :</strong> connecter la page admin aux routes produits, ajouter la gestion de description et d'image, afficher les erreurs de validation et masquer l'accès aux non-admins. Ajouter un bloc de recommandations dans une zone cohérente du catalogue, avec un état vide.</p>
+              <p><strong>Terminé quand :</strong> créer, modifier et supprimer un produit fonctionnent depuis l'interface, un utilisateur normal ne peut pas appeler ces actions avec succès, et l'interface reste utilisable sur un petit écran.</p>
+              <div class="task-resources"><a href="project/AUTO-ASSESSMENT.md">Critères admin/front</a><a target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Svelte+form+validation+file+upload+tutorial">Formulaires et upload</a><a target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Azure+Blob+Storage+upload+Node.js+tutorial">Azure Blob upload</a></div>
+            </article>
+            <article class="task-card yours">
+              <div class="task-head"><span class="owner">TOI</span><span class="date">19-21 nov.</span></div>
+              <h3>S2-E · Docker Swarm, déploiement et Azure</h3>
+              <p><strong>À faire :</strong> compléter <code>scapp.yml</code> avec les services et bases, créer le réseau, publier les images sur Docker Hub, déployer sur deux VMs, tester plusieurs réplicas et préparer Azure Storage. Écrire un script ou une procédure reproductible avec variables explicites.</p>
+              <p><strong>Terminé quand :</strong> une personne extérieure peut suivre le README, déployer la stack, accéder au front, constater que les services communiquent et reproduire au moins un test de montée en charge.</p>
+              <div class="task-resources"><a href="project/practicals/05_ElasticScaling.md">Docker Swarm</a><a href="project/practicals/06_MicrosoftAzure.md">Azure</a><a target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Docker+Swarm+replicas+scaling+deploy+tutorial">Réplicas et scaling</a></div>
+            </article>
+            <article class="task-card nathan">
+              <div class="task-head"><span class="owner">NATHAN</span><span class="date">19-21 nov.</span></div>
+              <h3>S2-F · Tests de parcours, documentation et rapport</h3>
+              <p><strong>À faire :</strong> écrire les scénarios de test lisibles : visite anonyme, inscription, reconnexion, panier, achat, admin, image, recommandation et erreur de service. Mettre à jour le README de chaque service, préparer le rapport PDF de deux pages et remplir l'auto-évaluation à partir des preuves.</p>
+              <p><strong>Terminé quand :</strong> chaque exigence possède une preuve ou une limite clairement écrite, les commandes de démarrage sont copiables, les captures ou résultats de test sont conservés et le rapport reflète réellement l'architecture.</p>
+              <div class="task-resources"><a href="project/AUTO-ASSESSMENT.md">Grille d'auto-évaluation</a><a href="project/README.md">Livrables</a><a target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=integration+testing+REST+API+Postman+tutorial">Tests API</a></div>
+            </article>
+          </div>
+          <div class="integration"><strong>Intégrations finales · dimanche 22 novembre</strong><span>Toi déploies une version candidate, Nathan exécute tous les scénarios. Ensuite, échange des rôles : Nathan suit le README depuis un dossier propre et Toi relis les parcours front. Le 23 novembre est réservé à la correction, au gel du dépôt et à la remise.</span></div>
+        </div>
+
+        <div class="anti-blocking">
+          <h3>Le protocole anti-blocage</h3>
+          <ol>
+            <li><strong>Contrat avant code :</strong> aucune intégration ne commence sans exemple JSON et code d'erreur connu.</li>
+            <li><strong>Mocks obligatoires :</strong> chaque service a une réponse simulée minimale pour que l'autre puisse avancer.</li>
+            <li><strong>Branches courtes :</strong> une branche par tâche, une PR petite, un test ou une commande de vérification dans la description.</li>
+            <li><strong>Fallback documenté :</strong> si Azure, Swarm ou un service est indisponible, la démo locale et le scénario simulé restent exécutables.</li>
+            <li><strong>Décisions gelées :</strong> les noms de routes, les champs JSON et les ports sont figés le 10 novembre ; les améliorations non essentielles passent après le rendu.</li>
+          </ol>
+        </div>
+      </section>
+
+      <section class="section" id="outils">
+        <div class="section-heading"><div><div class="eyebrow">La boîte à outils</div><h2>Ce que chaque outil apporte</h2></div></div>
+        <div class="grid">
+          <article class="card"><h3>JavaScript / Node.js</h3><p>Le langage et l'environnement principaux pour écrire les microservices. <strong>Express</strong> expose les API HTTP.</p><span class="tag">code</span><span class="tag">API</span></article>
+          <article class="card"><h3>Svelte / SvelteKit</h3><p>Le front-end fourni. Il devra appeler les services au lieu de lire seulement ses stores et le stockage du navigateur.</p><span class="tag">interface</span><span class="tag">Axios</span></article>
+          <article class="card"><h3>Docker</h3><p>Emballe un service et ce dont il a besoin dans un conteneur reproductible. Chaque service doit avoir son image.</p><span class="tag">conteneur</span><span class="tag">réseau</span></article>
+          <article class="card"><h3>CouchDB</h3><p>Base NoSQL de documents JSON, accessible en HTTP, avec des vues Map/Reduce pour interroger les données.</p><span class="tag">persistance</span><span class="tag">Map/Reduce</span></article>
+          <article class="card"><h3>Docker Swarm</h3><p>Coordonne plusieurs machines et permet de demander plusieurs instances d'un même service.</p><span class="tag">cluster</span><span class="tag">scaling</span></article>
+          <article class="card"><h3>Microsoft Azure</h3><p>Héberge les machines virtuelles et le stockage des images. Azure CLI permet de préparer l'infrastructure.</p><span class="tag">Cloud</span><span class="tag">Azure Storage</span></article>
+        </div>
+      </section>
+
+      <section class="section" id="checklist">
+        <div class="section-heading"><div><div class="eyebrow">Pilotage de l'équipe</div><h2>Checklist du projet</h2></div><p>Les cases sont enregistrées dans ce navigateur. Utilisez cette section pendant les réunions du groupe.</p></div>
+        <div class="progress"><div class="progress-top"><span class="progress-label">Avancement du guide</span><strong id="progressText">0 / 12</strong></div><div class="bar"><span id="progressBar"></span></div></div>
+        <div class="checklist">
+          <label class="check-item"><input type="checkbox"><span>J'ai lancé le front-end et compris ses pages principales.</span></label>
+          <label class="check-item"><input type="checkbox"><span>J'ai lancé un conteneur Docker et consulté ses logs.</span></label>
+          <label class="check-item"><input type="checkbox"><span>Je sais expliquer la différence entre front-end et back-end.</span></label>
+          <label class="check-item"><input type="checkbox"><span>Les utilisateurs sont enregistrés durablement dans CouchDB.</span></label>
+          <label class="check-item"><input type="checkbox"><span>Le catalogue est servi par une API et non plus seulement par des données statiques.</span></label>
+          <label class="check-item"><input type="checkbox"><span>Le panier et l'historique sont retrouvés après reconnexion.</span></label>
+          <label class="check-item"><input type="checkbox"><span>L'accès administrateur est vérifié côté serveur.</span></label>
+          <label class="check-item"><input type="checkbox"><span>Les images sont réellement stockées dans Azure Storage.</span></label>
+          <label class="check-item"><input type="checkbox"><span>Les services envoient des logs au service de journalisation.</span></label>
+          <label class="check-item"><input type="checkbox"><span>Les recommandations utilisent une vue Map/Reduce fonctionnelle.</span></label>
+          <label class="check-item"><input type="checkbox"><span>Le déploiement multi-machine et la montée en charge ont été testés.</span></label>
+          <label class="check-item"><input type="checkbox"><span>La documentation, le rapport PDF et l'auto-évaluation sont prêts.</span></label>
+        </div>
+      </section>
+
+      <section class="section" id="ressources">
+        <div class="section-heading"><div><div class="eyebrow">Pour vraiment comprendre</div><h2>Ressources sélectionnées</h2></div><p>Commencez par les ressources courtes, puis revenez aux documents du cours lorsque vous implémentez la notion.</p></div>
+        <div class="resource-tools"><input id="resourceSearch" type="search" placeholder="Filtrer : Docker, Azure, CouchDB..."></div>
+        <div class="resources" id="resourceList">
+          <article class="resource" data-search="slides cloud introduction virtualisation"><div class="resource-type">PDF</div><div><h3>Slides : introduction et virtualisation</h3><p>Les bases : Cloud, machines virtuelles et abstraction.</p><a href="slides/00-introduction.pdf">Introduction</a> · <a href="slides/01-virtualization.pdf">Virtualisation</a></div></article>
+          <article class="resource" data-search="slides paas soa microservices architecture"><div class="resource-type">PDF</div><div><h3>Slides : PaaS et architectures de services</h3><p>Le meilleur point de départ théorique pour comprendre le découpage en microservices.</p><a href="slides/02-PaaS-SOA.pdf">Ouvrir les slides du prof</a></div></article>
+          <article class="resource" data-search="slides storage database couchdb data management"><div class="resource-type">PDF</div><div><h3>Slides : stockage et gestion des données</h3><p>Persistance, données distribuées et choix de stockage.</p><a href="slides/03-Storage.pdf">Ouvrir les slides du prof</a></div></article>
+          <article class="resource" data-search="slides elasticity energy scaling"><div class="resource-type">PDF</div><div><h3>Slides : élasticité et énergie</h3><p>Pourquoi et comment adapter les ressources à la charge.</p><a href="slides/04-Elasticity-Green.pdf">Ouvrir les slides du prof</a></div></article>
+          <article class="resource" data-search="slides fault tolerance consistency"><div class="resource-type">PDF</div><div><h3>Slides : pannes et cohérence</h3><p>Les questions à se poser quand plusieurs services et bases travaillent ensemble.</p><a href="slides/05-FaultTolerance-Consistency.key.pdf">Ouvrir les slides du prof</a></div></article>
+          <article class="resource" data-search="slides zookeeper coordination services"><div class="resource-type">PDF</div><div><h3>Slides : services de coordination</h3><p>Coordination d'un système distribué.</p><a href="slides/06-Coordination-ZooKeeper.pdf">Ouvrir les slides du prof</a></div></article>
+          <article class="resource" data-search="youtube docker containers tutorial"><div class="resource-type">YT</div><div><h3>Docker pour débutants</h3><p>Images, conteneurs, ports, volumes et commandes essentielles.</p><a target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Docker+tutorial+beginner+containers+images+ports">Voir des vidéos YouTube</a></div></article>
+          <article class="resource" data-search="youtube docker compose networking"><div class="resource-type">YT</div><div><h3>Docker Compose et réseaux</h3><p>Comprendre comment plusieurs conteneurs communiquent.</p><a target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Docker+Compose+networking+tutorial">Rechercher sur YouTube</a></div></article>
+          <article class="resource" data-search="youtube microservices architecture rest api"><div class="resource-type">YT</div><div><h3>Microservices et API REST</h3><p>Découper une application et faire communiquer ses services.</p><a target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=microservices+architecture+REST+API+beginner">Rechercher sur YouTube</a></div></article>
+          <article class="resource" data-search="youtube node js express rest api javascript"><div class="resource-type">YT</div><div><h3>Node.js, Express et API REST</h3><p>Créer un serveur HTTP et ses routes en JavaScript.</p><a target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Node.js+Express+REST+API+tutorial+beginner">Rechercher sur YouTube</a></div></article>
+          <article class="resource" data-search="youtube javascript promises async await"><div class="resource-type">YT</div><div><h3>Promises, async/await et appels HTTP</h3><p>Indispensable pour comprendre le code asynchrone des services.</p><a target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=JavaScript+promises+async+await+explained">Rechercher sur YouTube</a></div></article>
+          <article class="resource" data-search="youtube svelte sveltekit tutorial frontend"><div class="resource-type">YT</div><div><h3>Svelte et SvelteKit</h3><p>Comprendre les composants, les stores, les routes et la réactivité.</p><a target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=SvelteKit+tutorial+stores+routes+beginner">Rechercher sur YouTube</a></div></article>
+          <article class="resource" data-search="youtube couchdb nosql json database fauxton"><div class="resource-type">YT</div><div><h3>CouchDB et bases NoSQL</h3><p>Documents JSON, API HTTP, Fauxton et vues.</p><a target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Apache+CouchDB+tutorial+Fauxton+NoSQL">Rechercher sur YouTube</a></div></article>
+          <article class="resource" data-search="youtube map reduce couchdb views"><div class="resource-type">YT</div><div><h3>Map/Reduce et vues CouchDB</h3><p>La notion directement liée au moteur de recommandations.</p><a target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=CouchDB+MapReduce+views+tutorial">Rechercher sur YouTube</a></div></article>
+          <article class="resource" data-search="youtube docker swarm scaling cluster"><div class="resource-type">YT</div><div><h3>Docker Swarm et scaling</h3><p>Machines manager/worker, services et réplicas.</p><a target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Docker+Swarm+tutorial+scaling+services">Rechercher sur YouTube</a></div></article>
+          <article class="resource" data-search="youtube azure virtual machine cli storage blob"><div class="resource-type">YT</div><div><h3>Azure : VM, CLI et Blob Storage</h3><p>Les briques Azure utilisées dans le projet.</p><a target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Azure+CLI+VM+Blob+Storage+tutorial+beginner">Rechercher sur YouTube</a></div></article>
+          <article class="resource" data-search="docs node npm javascript express svelte"><div class="resource-type">WEB</div><div><h3>Documentation de référence</h3><p>Les sources officielles à consulter lorsque vous codez.</p><a target="_blank" rel="noopener" href="https://nodejs.org/en/learn/getting-started/introduction-to-nodejs">Node.js</a> · <a target="_blank" rel="noopener" href="https://expressjs.com/en/starter/installing.html">Express</a> · <a target="_blank" rel="noopener" href="https://svelte.dev/tutorial/svelte/welcome-to-svelte">Svelte</a></div></article>
+          <article class="resource" data-search="docs couchdb docker azure storage rest api"><div class="resource-type">WEB</div><div><h3>Documentation officielle Cloud</h3><p>À garder sous la main pour les détails techniques.</p><a target="_blank" rel="noopener" href="https://docs.couchdb.org/en/stable/intro/index.html">CouchDB</a> · <a target="_blank" rel="noopener" href="https://docs.docker.com/get-started/">Docker</a> · <a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/azure/storage/blobs/storage-blobs-introduction">Azure Storage</a></div></article>
+          <article class="resource" data-search="tutorial virtual machine docker multipass project"><div class="resource-type">DOC</div><div><h3>Tutoriels du dépôt</h3><p>Les manipulations attendues dans l'ordre du cours.</p><a href="project/practicals/README.md">Bootstrap</a> · <a href="tutorials/01_VirtualMachines/README.md">VM</a> · <a href="tutorials/02_DockerContainers/README.md">Docker</a></div></article>
+          <article class="resource" data-search="tutorial authentication microservices nosql elasticity azure project"><div class="resource-type">DOC</div><div><h3>Pratiques du projet</h3><p>Les exercices guidés pour passer du premier service au Cloud.</p><a href="project/practicals/02_ProjectSetup_AuthenticationService.md">Auth</a> · <a href="project/practicals/04_NoSQL_databases.md">NoSQL</a> · <a href="project/practicals/05_ElasticScaling.md">Scaling</a> · <a href="project/practicals/06_MicrosoftAzure.md">Azure</a></div></article>
+        </div>
+      </section>
+
+      <section class="section" id="glossaire">
+        <div class="section-heading"><div><div class="eyebrow">Les mots à savoir expliquer</div><h2>Glossaire express</h2></div></div>
+        <details><summary>API REST</summary><p>Une manière standardisée de demander une action à un service par HTTP. Par exemple : consulter un produit, créer un utilisateur ou modifier un panier.</p></details>
+        <details><summary>Microservice</summary><p>Petit programme indépendant qui s'occupe d'un domaine précis. Il peut être développé, déployé et augmenté séparément des autres.</p></details>
+        <details><summary>Conteneur Docker</summary><p>Environnement emballé qui contient un programme et ses dépendances. Il permet de lancer le même service de manière prévisible sur un ordinateur, une VM ou Azure.</p></details>
+        <details><summary>Base NoSQL / document JSON</summary><p>Base qui stocke des objets souples sous forme de documents JSON plutôt que dans des tables relationnelles classiques.</p></details>
+        <details><summary>Stateless</summary><p>Un service stateless ne garde pas son état de session dans sa mémoire locale. L'état important est stocké dans une base, ce qui facilite l'ajout d'instances.</p></details>
+        <details><summary>Élasticité</summary><p>Capacité à ajouter ou retirer des ressources selon la charge. L'objectif est de servir plus d'utilisateurs sans devoir tout reconstruire.</p></details>
+        <details><summary>Map/Reduce</summary><p>Technique qui parcourt des documents, regroupe les informations utiles et produit des résultats consultables. Ici, elle sert à calculer des recommandations.</p></details>
+        <details><summary>API Gateway</summary><p>Point d'entrée qui reçoit les demandes du front-end et les dirige vers le bon microservice.</p></details>
+      </section>
+
+      <footer>Guide complémentaire basé sur les consignes du dépôt LINFO2145. Pour les règles exactes d'évaluation, la date officielle et les attentes de l'équipe enseignante, la référence reste <a href="project/README.md">README du projet</a>.</footer>
+    </main>
+  </div>
+
+  <script>
+    const checks = [...document.querySelectorAll('.check-item input')];
+    const progressText = document.querySelector('#progressText');
+    const progressBar = document.querySelector('#progressBar');
+    const savedChecks = JSON.parse(localStorage.getItem('scapp-handbook-checks') || '[]');
+
+    function updateProgress() {
+      const done = checks.filter((check) => check.checked).length;
+      progressText.textContent = `${done} / ${checks.length}`;
+      progressBar.style.width = `${(done / checks.length) * 100}%`;
+      checks.forEach((check, index) => check.closest('.check-item').classList.toggle('done', check.checked));
+      localStorage.setItem('scapp-handbook-checks', JSON.stringify(checks.map((check) => check.checked)));
+    }
+    checks.forEach((check, index) => {
+      check.checked = Boolean(savedChecks[index]);
+      check.addEventListener('change', updateProgress);
+    });
+    updateProgress();
+
+    const resourceSearch = document.querySelector('#resourceSearch');
+    const resources = [...document.querySelectorAll('.resource')];
+    resourceSearch.addEventListener('input', () => {
+      const query = resourceSearch.value.toLowerCase().trim();
+      resources.forEach((resource) => {
+        resource.hidden = query && !resource.dataset.search.includes(query);
+      });
+    });
+
+    const sections = [...document.querySelectorAll('.section, #start')];
+    const links = [...document.querySelectorAll('.sidebar nav a')];
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        links.forEach((link) => link.classList.toggle('active', link.getAttribute('href') === `#${entry.target.id}`));
+      });
+    }, { rootMargin: '-20% 0px -65% 0px' });
+    sections.forEach((section) => observer.observe(section));
+  </script>
+</body>
+
+</html>

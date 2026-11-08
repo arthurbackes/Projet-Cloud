@@ -1,0 +1,20 @@
+# Dependencies
+node_modules/
+
+# SvelteKit generated files
+.svelte-kit/
+build/
+dist/
+
+# Local package metadata accidentally created at repository root
+/package-lock.json
+
+# Local environment and logs
+.env
+.env.*
+!.env.example
+*.log
+
+# Operating-system files
+.DS_Store
+Thumbs.db
