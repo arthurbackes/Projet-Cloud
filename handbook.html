@@ -347,7 +347,7 @@
           <ol>
             <li><strong>Contrat avant code :</strong> aucune intégration ne commence sans exemple JSON et code d'erreur connu.</li>
             <li><strong>Mocks obligatoires :</strong> chaque service a une réponse simulée minimale pour que l'autre puisse avancer.</li>
-            <li><strong>Branches courtes :</strong> une branche par tâche, une PR petite, un test ou une commande de vérification dans la description.</li>
+            <li><strong>Workflow Git par issue :</strong> créer une branche dédiée depuis <code>main</code> (par exemple <code>feat/auth-couchdb</code> ou <code>fix/cart-total</code>), faire des commits ciblés, pousser la branche, ouvrir une PR vers <code>main</code>, puis demander une relecture à l'autre membre avant de fusionner. Ne jamais travailler directement sur <code>main</code>.</li>
             <li><strong>Fallback documenté :</strong> si Azure, Swarm ou un service est indisponible, la démo locale et le scénario simulé restent exécutables.</li>
             <li><strong>Décisions gelées :</strong> les noms de routes, les champs JSON et les ports sont figés le 10 novembre ; les améliorations non essentielles passent après le rendu.</li>
           </ol>
