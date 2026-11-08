@@ -125,6 +125,9 @@
     .nathan .owner { background: var(--coral); }
     .date { color: var(--muted); }
     .task-card h3 { color: var(--navy); font-size: 1.05rem; }
+    .branch-note { margin: -3px 0 11px; padding: 6px 8px; background: #edf3ee; color: var(--navy); font: .78rem 'Trebuchet MS', sans-serif; }
+    .branch-note.yes { border-left: 3px solid var(--teal); }
+    .branch-note code { padding: 2px 4px; background: #dce9e3; font-size: .9em; }
     .task-card p { color: #4a5860; font-size: .93rem; }
     .task-card code { padding: 1px 4px; background: #eaf0ed; font-size: .82em; }
     .task-resources { display: flex; flex-wrap: wrap; gap: 7px; padding-top: 7px; }
@@ -249,6 +252,7 @@
             <article class="task-card yours">
               <div class="task-head"><span class="owner">TOI</span><span class="date">9-10 nov.</span></div>
               <h3>S1-A · Contrats d'API et données de référence</h3>
+              <div class="branch-note yes"><strong>Branche :</strong> OUI · <code>chore/api-contracts</code></div>
               <p><strong>À faire :</strong> définir dans un dossier partagé les routes, les paramètres, les réponses JSON et les codes d'erreur pour auth, produits, panier, achats et logs. Ajouter 8 produits de test, deux utilisateurs et un exemple de jeton. Fournir un fichier de mock que Nathan peut appeler sans attendre les services.</p>
               <p><strong>Terminé quand :</strong> les deux personnes valident le document, chaque route possède un exemple de requête/réponse, et les mocks peuvent être lancés localement.</p>
               <div class="task-resources"><a href="project/README.md">Consigne API</a><a target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=REST+API+HTTP+status+codes+JSON+tutorial">REST / HTTP / JSON</a></div>
@@ -256,6 +260,7 @@
             <article class="task-card nathan">
               <div class="task-head"><span class="owner">NATHAN</span><span class="date">9-10 nov.</span></div>
               <h3>S1-B · Cartographie du front et couche API</h3>
+              <div class="branch-note yes"><strong>Branche :</strong> OUI · <code>feat/frontend-api-layer</code></div>
               <p><strong>À faire :</strong> repérer dans Svelte chaque accès à <code>localStorage</code>, <code>sessionStorage</code> et aux stores produits/cart/auth. Créer une petite couche de clients HTTP Axios avec des URLs configurables et des fonctions nommées, même si elles utilisent d'abord les mocks de S1-A.</p>
               <p><strong>Terminé quand :</strong> les pages savent appeler une fonction de service au lieu de construire elles-mêmes les URLs, et le changement de mock vers une vraie URL se fait par variable d'environnement.</p>
               <div class="task-resources"><a href="project/practicals/03_ProjectSetup_Microservices.md">Connexion Svelte/API</a><a target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=SvelteKit+stores+Axios+API+tutorial">Svelte stores + Axios</a></div>
@@ -263,6 +268,7 @@
             <article class="task-card yours">
               <div class="task-head"><span class="owner">TOI</span><span class="date">10-12 nov.</span></div>
               <h3>S1-C · Authentification persistante</h3>
+              <div class="branch-note yes"><strong>Branche :</strong> OUI · <code>feat/auth-couchdb</code></div>
               <p><strong>À faire :</strong> remplacer le dictionnaire en mémoire du service users par CouchDB, conserver les mots de passe hachés, gérer les doublons et produire un jeton vérifiable. Ajouter une vérification d'identité et de rôle réutilisable par les autres services. Ne pas mettre le mot de passe dans une URL de production.</p>
               <p><strong>Terminé quand :</strong> inscription, connexion, mauvais mot de passe, utilisateur inconnu et redémarrage du conteneur sont testés avec <code>curl</code>. Les données restent disponibles après redémarrage.</p>
               <div class="task-resources"><a href="project/practicals/02_ProjectSetup_AuthenticationService.md">Tutoriel Auth</a><a href="project/practicals/04_NoSQL_databases.md">Tutoriel CouchDB</a><a target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=JWT+authentication+Node.js+Express+tutorial">JWT / bcrypt</a></div>
@@ -270,6 +276,7 @@
             <article class="task-card nathan">
               <div class="task-head"><span class="owner">NATHAN</span><span class="date">10-12 nov.</span></div>
               <h3>S1-D · Connexion du front à l'auth</h3>
+              <div class="branch-note yes"><strong>Branche :</strong> OUI · <code>feat/frontend-auth</code></div>
               <p><strong>À faire :</strong> brancher les pages register et login sur les routes validées. Stocker uniquement le jeton et les informations d'affichage utiles côté navigateur, afficher les erreurs, protéger les actions panier et admin dans l'interface, et prévoir un bouton de déconnexion.</p>
               <p><strong>Terminé quand :</strong> un nouvel utilisateur peut s'inscrire, se déconnecter, se reconnecter après fermeture du navigateur et voir un message clair pour chaque erreur. Les appels peuvent encore cibler le mock si le service de Toi n'est pas disponible.</p>
               <div class="task-resources"><a href="project/practicals/03_ProjectSetup_Microservices.md">Appel depuis Svelte</a><a target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=SvelteKit+form+submit+fetch+API+tutorial">Formulaires Svelte</a></div>
@@ -277,6 +284,7 @@
             <article class="task-card yours">
               <div class="task-head"><span class="owner">TOI</span><span class="date">11-13 nov.</span></div>
               <h3>S1-E · Service catalogue et stack Docker locale</h3>
+              <div class="branch-note yes"><strong>Branche :</strong> OUI · <code>feat/products-service</code></div>
               <p><strong>À faire :</strong> créer le service produits et sa base CouchDB séparée. Implémenter consultation de la liste, consultation par identifiant, création, modification et suppression avec contrôle admin. Ajouter le service et sa base au réseau Docker, avec variables d'environnement et script de démarrage.</p>
               <p><strong>Terminé quand :</strong> les routes répondent aux exemples du contrat, les droits sont vérifiés côté serveur, les données survivent à un redémarrage, et Nathan peut les appeler avec son client front ou <code>curl</code>.</p>
               <div class="task-resources"><a href="project/practicals/04_NoSQL_databases.md">CouchDB REST</a><a target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Node.js+Express+CRUD+REST+API+tutorial">Express CRUD</a><a target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Docker+Compose+multiple+containers+network+tutorial">Réseau Docker</a></div>
@@ -284,12 +292,13 @@
             <article class="task-card nathan">
               <div class="task-head"><span class="owner">NATHAN</span><span class="date">11-13 nov.</span></div>
               <h3>S1-F · Catalogue front et états d'interface</h3>
+              <div class="branch-note yes"><strong>Branche :</strong> OUI · <code>feat/frontend-catalogue</code></div>
               <p><strong>À faire :</strong> remplacer le catalogue statique par le client produits, gérer chargement, erreur et catalogue vide, conserver les composants d'affichage existants, puis adapter l'ajout au panier pour envoyer un identifiant et une quantité plutôt qu'un objet local complet.</p>
               <p><strong>Terminé quand :</strong> le catalogue se charge depuis le mock ou le service réel en changeant une URL, les erreurs sont visibles et aucun composant ne dépend directement de la structure interne de CouchDB.</p>
               <div class="task-resources"><a href="project/practicals/01_ProjectSetup_FrontEnd.md">Structure du front</a><a target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Svelte+fetch+API+loading+error+states+tutorial">États de chargement</a></div>
             </article>
           </div>
-          <div class="integration"><strong>Point d'intégration · dimanche 15 novembre</strong><span>Démo commune : inscription → connexion → catalogue → détail produit. Tester en local avec les vrais services, puis refaire le même parcours avec les mocks si un service tombe. Livrable : tag Git <code>sprint-1-done</code> et une liste de bugs priorisés.</span></div>
+          <div class="integration"><strong>Point d'intégration · dimanche 15 novembre</strong><span><b>Branche dédiée : NON.</b> Fusionner les PR validées dans <code>main</code>, puis créer le tag Git <code>sprint-1-done</code>. Démo commune : inscription → connexion → catalogue → détail produit. Tester avec les vrais services, puis refaire le parcours avec les mocks si un service tombe.</span></div>
         </div>
 
         <div class="sprint-block">
@@ -299,6 +308,7 @@
             <article class="task-card yours">
               <div class="task-head"><span class="owner">TOI</span><span class="date">16-18 nov.</span></div>
               <h3>S2-A · Panier, achats et historique persistants</h3>
+              <div class="branch-note yes"><strong>Branche :</strong> OUI · <code>feat/cart-orders</code></div>
               <p><strong>À faire :</strong> créer les services panier et achats avec une base par service. Utiliser l'identité du jeton pour isoler les données. Implémenter ajout, retrait, quantité, consultation du panier, validation d'achat et historique. Définir le comportement en cas de double validation ou de produit introuvable.</p>
               <p><strong>Terminé quand :</strong> le panier et l'historique sont retrouvés depuis un autre navigateur, une erreur ne vide pas le panier, et un test couvre le parcours complet avec deux utilisateurs distincts.</p>
               <div class="task-resources"><a href="project/README.md">Exigences panier/achat</a><a target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=distributed+systems+idempotency+payments+beginner">Idempotence</a><a target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=REST+API+authentication+authorization+JWT+tutorial">Autorisation</a></div>
@@ -306,6 +316,7 @@
             <article class="task-card nathan">
               <div class="task-head"><span class="owner">NATHAN</span><span class="date">16-18 nov.</span></div>
               <h3>S2-B · Panier et checkout dans Svelte</h3>
+              <div class="branch-note yes"><strong>Branche :</strong> OUI · <code>feat/frontend-checkout</code></div>
               <p><strong>À faire :</strong> remplacer le panier local et l'historique local par les clients API. Afficher les états chargement, vide, erreur et succès. Empêcher l'achat sans connexion, recharger le panier au démarrage et éviter les doubles clics lors de la validation.</p>
               <p><strong>Terminé quand :</strong> l'interface fonctionne avec les mocks du contrat S2-A et avec les vrais services dès qu'ils sont disponibles. La quantité affichée, le total et l'historique correspondent aux réponses serveur.</p>
               <div class="task-resources"><a href="project/practicals/03_ProjectSetup_Microservices.md">Appels front/back</a><a target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=SvelteKit+API+data+loading+states+tutorial">Données SvelteKit</a></div>
@@ -313,6 +324,7 @@
             <article class="task-card yours">
               <div class="task-head"><span class="owner">TOI</span><span class="date">16-19 nov.</span></div>
               <h3>S2-C · Logs, mesures et recommandations</h3>
+              <div class="branch-note yes"><strong>Branche :</strong> OUI · <code>feat/logging-recommendations</code></div>
               <p><strong>À faire :</strong> créer le service de logs avec CouchDB obligatoire. Définir un événement JSON commun : utilisateur, action, produit, service, date, durée, statut. Ajouter l'envoi asynchrone depuis les services. Créer une vue Map/Reduce qui compte les produits consultés ou achetés et exposer une route de recommandations.</p>
               <p><strong>Terminé quand :</strong> une action réelle produit un log consultable, la durée d'une requête est présente, la vue retourne un résultat reproductible sur les données de test et l'API renvoie au moins trois recommandations ou un résultat vide propre.</p>
               <div class="task-resources"><a href="project/README.md">Exigences logs</a><a href="project/practicals/04_NoSQL_databases.md">Vues CouchDB</a><a target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=CouchDB+MapReduce+views+recommendation+tutorial">Map/Reduce</a></div>
@@ -320,6 +332,7 @@
             <article class="task-card nathan">
               <div class="task-head"><span class="owner">NATHAN</span><span class="date">16-19 nov.</span></div>
               <h3>S2-D · Administration et expérience complète</h3>
+              <div class="branch-note yes"><strong>Branche :</strong> OUI · <code>feat/admin-images</code></div>
               <p><strong>À faire :</strong> connecter la page admin aux routes produits, ajouter la gestion de description et d'image, afficher les erreurs de validation et masquer l'accès aux non-admins. Ajouter un bloc de recommandations dans une zone cohérente du catalogue, avec un état vide.</p>
               <p><strong>Terminé quand :</strong> créer, modifier et supprimer un produit fonctionnent depuis l'interface, un utilisateur normal ne peut pas appeler ces actions avec succès, et l'interface reste utilisable sur un petit écran.</p>
               <div class="task-resources"><a href="project/AUTO-ASSESSMENT.md">Critères admin/front</a><a target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Svelte+form+validation+file+upload+tutorial">Formulaires et upload</a><a target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Azure+Blob+Storage+upload+Node.js+tutorial">Azure Blob upload</a></div>
@@ -327,6 +340,7 @@
             <article class="task-card yours">
               <div class="task-head"><span class="owner">TOI</span><span class="date">19-21 nov.</span></div>
               <h3>S2-E · Docker Swarm, déploiement et Azure</h3>
+              <div class="branch-note yes"><strong>Branche :</strong> OUI · <code>feat/swarm-azure-deploy</code></div>
               <p><strong>À faire :</strong> compléter <code>scapp.yml</code> avec les services et bases, créer le réseau, publier les images sur Docker Hub, déployer sur deux VMs, tester plusieurs réplicas et préparer Azure Storage. Écrire un script ou une procédure reproductible avec variables explicites.</p>
               <p><strong>Terminé quand :</strong> une personne extérieure peut suivre le README, déployer la stack, accéder au front, constater que les services communiquent et reproduire au moins un test de montée en charge.</p>
               <div class="task-resources"><a href="project/practicals/05_ElasticScaling.md">Docker Swarm</a><a href="project/practicals/06_MicrosoftAzure.md">Azure</a><a target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=Docker+Swarm+replicas+scaling+deploy+tutorial">Réplicas et scaling</a></div>
@@ -334,12 +348,13 @@
             <article class="task-card nathan">
               <div class="task-head"><span class="owner">NATHAN</span><span class="date">19-21 nov.</span></div>
               <h3>S2-F · Tests de parcours, documentation et rapport</h3>
+              <div class="branch-note yes"><strong>Branche :</strong> OUI · <code>docs/tests-final-delivery</code></div>
               <p><strong>À faire :</strong> écrire les scénarios de test lisibles : visite anonyme, inscription, reconnexion, panier, achat, admin, image, recommandation et erreur de service. Mettre à jour le README de chaque service, préparer le rapport PDF de deux pages et remplir l'auto-évaluation à partir des preuves.</p>
               <p><strong>Terminé quand :</strong> chaque exigence possède une preuve ou une limite clairement écrite, les commandes de démarrage sont copiables, les captures ou résultats de test sont conservés et le rapport reflète réellement l'architecture.</p>
               <div class="task-resources"><a href="project/AUTO-ASSESSMENT.md">Grille d'auto-évaluation</a><a href="project/README.md">Livrables</a><a target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=integration+testing+REST+API+Postman+tutorial">Tests API</a></div>
             </article>
           </div>
-          <div class="integration"><strong>Intégrations finales · dimanche 22 novembre</strong><span>Toi déploies une version candidate, Nathan exécute tous les scénarios. Ensuite, échange des rôles : Nathan suit le README depuis un dossier propre et Toi relis les parcours front. Le 23 novembre est réservé à la correction, au gel du dépôt et à la remise.</span></div>
+          <div class="integration"><strong>Intégrations finales · dimanche 22 novembre</strong><span><b>Branche dédiée : NON.</b> Les branches de tâches sont fusionnées dans <code>main</code> après revue. Toi déploies une version candidate, Nathan exécute tous les scénarios. Ensuite, échange des rôles : Nathan suit le README depuis un dossier propre et Toi relis les parcours front. Le 23 novembre est réservé à la correction, au gel du dépôt et à la remise.</span></div>
         </div>
 
         <div class="anti-blocking">
