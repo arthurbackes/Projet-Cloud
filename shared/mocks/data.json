@@ -1,0 +1,106 @@
+{
+  "login": {
+    "email": "user@scapp.com",
+    "password": "password123"
+  },
+  "users": [
+    {
+      "id": "u1",
+      "email": "admin@scapp.com",
+      "password": "adminpassword",
+      "role": "admin"
+    },
+    {
+      "id": "u2",
+      "email": "user@scapp.com",
+      "password": "password123",
+      "role": "user"
+    }
+  ],
+  "products": [
+    {
+      "id": "p1",
+      "name": "Laptop Dell",
+      "price": 1200,
+      "stock": 5
+    },
+    {
+      "id": "p2",
+      "name": "Souris sans fil",
+      "price": 25,
+      "stock": 12
+    },
+    {
+      "id": "p3",
+      "name": "Clavier mécanique",
+      "price": 80,
+      "stock": 8
+    },
+    {
+      "id": "p4",
+      "name": "Écran 27 pouces",
+      "price": 250,
+      "stock": 3
+    },
+    {
+      "id": "p5",
+      "name": "Casque audio",
+      "price": 150,
+      "stock": 15
+    },
+    {
+      "id": "p6",
+      "name": "Webcam HD",
+      "price": 60,
+      "stock": 10
+    },
+    {
+      "id": "p7",
+      "name": "Disque SSD 1To",
+      "price": 100,
+      "stock": 20
+    },
+    {
+      "id": "p8",
+      "name": "Hub USB-C",
+      "price": 35,
+      "stock": 25
+    }
+  ],
+  "cart": {
+    "items": [
+      {
+        "productId": "p1",
+        "name": "Laptop Dell",
+        "quantity": 1,
+        "price": 1200
+      }
+    ],
+    "total": 1200
+  },
+  "purchases": [
+    {
+      "id": "o1",
+      "orderId": "o1",
+      "userId": "u2",
+      "date": "2026-11-09T10:00:00Z",
+      "total": 1200,
+      "status": "confirmed",
+      "items": [
+        {
+          "productId": "p1",
+          "quantity": 1,
+          "price": 1200
+        }
+      ]
+    }
+  ],
+  "logs": [
+    {
+      "id": "l1",
+      "action": "page_view",
+      "target": "product_p1",
+      "timestamp": "2026-11-09T10:05:00Z"
+    }
+  ]
+}

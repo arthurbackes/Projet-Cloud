@@ -354,7 +354,7 @@
               <div class="task-resources"><a href="project/AUTO-ASSESSMENT.md">Grille d'auto-évaluation</a><a href="project/README.md">Livrables</a><a target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=integration+testing+REST+API+Postman+tutorial">Tests API</a></div>
             </article>
           </div>
-          <div class="integration"><strong>Intégrations finales · dimanche 22 novembre</strong><span><b>Branche dédiée : NON.</b> Les branches de tâches sont fusionnées dans <code>main</code> après revue. Toi déploies une version candidate, Nathan exécute tous les scénarios. Ensuite, échange des rôles : Nathan suit le README depuis un dossier propre et Toi relis les parcours front. Le 23 novembre est réservé à la correction, au gel du dépôt et à la remise.</span></div>
+          <div class="integration"><strong>Intégrations finales · dimanche 22 novembre</strong><span><b>Branche dédiée : NON.</b> Les branches de tâches sont déjà fusionnées dans <code>dev</code> après revue ; cette étape ouvre seulement la PR de fin de sprint de <code>dev</code> vers <code>main</code>. Toi déploies une version candidate, Nathan exécute tous les scénarios. Ensuite, échange des rôles : Nathan suit le README depuis un dossier propre et Toi relis les parcours front. Le 23 novembre est réservé à la correction, au gel du dépôt et à la remise.</span></div>
         </div>
 
         <div class="anti-blocking">
@@ -362,7 +362,7 @@
           <ol>
             <li><strong>Contrat avant code :</strong> aucune intégration ne commence sans exemple JSON et code d'erreur connu.</li>
             <li><strong>Mocks obligatoires :</strong> chaque service a une réponse simulée minimale pour que l'autre puisse avancer.</li>
-            <li><strong>Workflow Git par issue :</strong> créer une branche dédiée depuis <code>main</code> (par exemple <code>feat/auth-couchdb</code> ou <code>fix/cart-total</code>), faire des commits ciblés, pousser la branche, ouvrir une PR vers <code>main</code>, puis demander une relecture à l'autre membre avant de fusionner. Ne jamais travailler directement sur <code>main</code>.</li>
+            <li><strong>Workflow Git par issue :</strong> créer une branche dédiée depuis <code>dev</code> (par exemple <code>feat/auth-couchdb</code> ou <code>fix/cart-total</code>), faire des commits ciblés, pousser la branche, ouvrir une PR vers <code>dev</code>, puis demander une relecture à l'autre membre avant de fusionner. À la fin du sprint, ouvrir une seule PR de <code>dev</code> vers <code>main</code>. Ne jamais travailler directement sur <code>main</code>.</li>
             <li><strong>Fallback documenté :</strong> si Azure, Swarm ou un service est indisponible, la démo locale et le scénario simulé restent exécutables.</li>
             <li><strong>Décisions gelées :</strong> les noms de routes, les champs JSON et les ports sont figés le 10 novembre ; les améliorations non essentielles passent après le rendu.</li>
           </ol>
