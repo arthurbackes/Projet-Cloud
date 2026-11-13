@@ -1,23 +1,18 @@
 const bcrypt = require('bcryptjs')
+const nano = require('nano')
 const tku = require('./en-de-coders')
 
-var users = {}
+
+const couch = nano(process.env.DB_URL) 
+const users = couch.db.use(process.env.DB_NAME || 'users')
+// const users represents the DB
 
 function equalPassws (usrPass, usrDbPass) {
   return bcrypt.compareSync(usrPass, usrDbPass)
 }
 
 function createUser (usrName, passw) {
-  return new Promise((resolve, reject) => {
-    if (!users[usrName]) {
-      users[usrName] = {
-        hashedPassw: bcrypt.hashSync(passw, bcrypt.genSaltSync())
-      }
-      resolve(tku.encodeToken(usrName))
-    } else {
-      reject(new Error(`User (${usrName}) already exist.`))
-    }
-  })
+  const HashOfPassword = bcrypt.hash
 }
 
 function getUser (usrName, passw) {

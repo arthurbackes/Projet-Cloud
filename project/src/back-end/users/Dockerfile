@@ -14,4 +14,7 @@ RUN npm install
 ADD gulpfile.js .
 ADD src src
 
-CMD npm start
+RUN apk update && apk add bash curl
+ADD boot-in-order.sh .
+RUN chmod +x boot-in-order.sh
+CMD ["./boot-in-order.sh"]
