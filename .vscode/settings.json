@@ -1,0 +1,4 @@
+{
+  "typescript.tsdk": "project/src/front-end/node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true
+}
