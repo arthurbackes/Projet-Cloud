@@ -2,12 +2,62 @@ const bcrypt = require('bcryptjs')
 const nano = require('nano')
 const tku = require('./en-de-coders')
 
+const users = nano(process.env.DB_URL)
 
-const couch = nano(process.env.DB_URL) 
-const users = couch.db.use(process.env.DB_NAME || 'users')
+function hashPassword (password) {
+  return new Promise((resolve, reject) => {
+    bcrypt.hash(password, 10, (error, passwordHash) => {
+      if (error) {
+        reject(error)
+        return
+      }
+
+      resolve(passwordHash)
+    })
+  })
+}
+
+function comparePassword (password, passwordHash) {
+  return new Promise((resolve, reject) => {
+    bcrypt.compare(password, passwordHash, (error, matches) => {
+      if (error) {
+        reject(error)
+        return
+      }
+
+      resolve(matches)
+    })
+  })
+}
+
+function insertUser (userDoc) {
+  return new Promise((resolve, reject) => {
+    users.insert(userDoc, userDoc._id, (error, result) => {
+      if (error) {
+        reject(error)
+        return
+      }
+
+      resolve(result)
+    })
+  })
+}
+
+function fetchUser (username) {
+  return new Promise((resolve, reject) => {
+    users.get(username, (error, userDoc) => {
+      if (error) {
+        reject(error)
+        return
+      }
+
+      resolve(userDoc)
+    })
+  })
+}
 
 async function createUser (usrName, passw) {
-  const HashOfPassword = await bcrypt.hash(passw, 10) // 10 = cout de hachage
+  const HashOfPassword = await hashPassword(passw)
   const userDoc = {
     _id: usrName,
     type: 'user',
@@ -16,9 +66,9 @@ async function createUser (usrName, passw) {
     psswhash: HashOfPassword
   }
   try {
-    await users.insert(userDoc)
+    await insertUser(userDoc)
     return tku.encodeToken(usrName)
-  } catch(error) {
+  } catch (error) {
     if (error.statusCode === 409 || error.error === 'conflict') {
       const conflictError = new Error(`User ${usrName} already exists`)
       conflictError.statusCode = 409
@@ -31,8 +81,8 @@ async function createUser (usrName, passw) {
 
 async function getUser (usrName, passw) {
   try {
-    const userDoc = await users.get(usrName)
-    const passMatch = await bcrypt.compare(passw, userDoc.psswhash)
+    const userDoc = await fetchUser(usrName)
+    const passMatch = await comparePassword(passw, userDoc.psswhash)
 
     if (!passMatch) {
       const authenticationError = new Error('Invalid username or password')
@@ -40,7 +90,7 @@ async function getUser (usrName, passw) {
       throw authenticationError
     }
     return tku.encodeToken(usrName)
-  } catch(error) {
+  } catch (error) {
     if (error.statusCode === 404 || error.error === 'not_found') {
       const authenticationError = new Error('Invalid username or password')
       authenticationError.statusCode = 401
