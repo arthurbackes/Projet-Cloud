@@ -3,45 +3,16 @@
 	import { goto } from '$app/navigation';
 
 	import { addToast } from '../../stores/toasts';
+    import { dataset_dev } from 'svelte/internal';
 
 	let username = '';
 	let password = '';
 
-	function handleOnSubmit() {
-		if (username === 'admin' && password === 'admin') {
-			window.localStorage.setItem('username', 'admin');
-			window.localStorage.setItem('password', 'admin');
-			$user.isLogged = true;
-			$user.isAdmin = true;
-			window.localStorage.setItem('auth', JSON.stringify($user));
-			goto('/');
-			return;
-		}
-		let localUser = window.localStorage.getItem('username');
-		if (localUser && localUser === username) {
-			let localPassw = window.localStorage.getItem('password');
-			if (localPassw === password) {
-				$user.isLogged = true;
-				$user.isAdmin = false;
-				window.localStorage.setItem('auth', JSON.stringify($user));
-				goto('/');
-				return;
-			} else {
-				addToast({
-					message: 'Login error: wrong password',
-					type: 'error',
-					dismissible: true,
-					timeout: 3000
-				});
-			}
-		} else {
-			addToast({
-				message: 'Login error: unknown username',
-				type: 'error',
-				dismissible: true,
-				timeout: 3000
-			});
-		}
+	async function handleOnSubmit() {
+		const response = await fetch(import.meta.env.VITE_API_URL + '/user/login', {
+			
+		})
+		
 	}
 </script>
 
