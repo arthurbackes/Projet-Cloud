@@ -5,11 +5,6 @@ const tku = require('./en-de-coders')
 
 const couch = nano(process.env.DB_URL) 
 const users = couch.db.use(process.env.DB_NAME || 'users')
-// const users represents the DB
-
-function equalPassws (usrPass, usrDbPass) {
-  return bcrypt.compareSync(usrPass, usrDbPass)
-}
 
 async function createUser (usrName, passw) {
   const HashOfPassword = await bcrypt.hash(passw, 10) // 10 = cout de hachage
@@ -25,10 +20,13 @@ async function createUser (usrName, passw) {
     return tku.encodeToken(usrName)
   } catch(error) {
     if (error.statusCode === 409 || error.error === 'conflict') {
-      throw new Error(`User ${usrName} already exists`)
+      const conflictError = new Error(`User ${usrName} already exists`)
+      conflictError.statusCode = 409
+      throw conflictError
     }
+
+    throw error
   }
-  
 }
 
 async function getUser (usrName, passw) {
@@ -37,13 +35,18 @@ async function getUser (usrName, passw) {
     const passMatch = await bcrypt.compare(passw, userDoc.psswhash)
 
     if (!passMatch) {
-      throw new Error(`User ${usrName} password does not match`)
+      const authenticationError = new Error('Invalid username or password')
+      authenticationError.statusCode = 401
+      throw authenticationError
     }
     return tku.encodeToken(usrName)
   } catch(error) {
     if (error.statusCode === 404 || error.error === 'not_found') {
-      throw new Error(`User ${usrName} does not exists`)
+      const authenticationError = new Error('Invalid username or password')
+      authenticationError.statusCode = 401
+      throw authenticationError
     }
+
     throw error
   }
 }
