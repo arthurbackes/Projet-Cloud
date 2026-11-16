@@ -22,9 +22,10 @@ services:     # list all services for your application
     # expose port number 3000 of host running this service
     ports: [ "3000:80" ]
     environment: # boot in order
-      - WITH_PERSISTENT_DATA=Y 
+      - WITH_PERSISTENT_DATA=Y
       - DB_NAME=users
       - DB_URL=http://admin:admin@users-db:5984/users
+      - TOKEN_SECRET=${TOKEN_SECRET}
     deploy:
       replicas: 1
       restart_policy:
