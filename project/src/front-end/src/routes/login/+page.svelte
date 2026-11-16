@@ -3,15 +3,57 @@
 	import { goto } from '$app/navigation';
 
 	import { addToast } from '../../stores/toasts';
-    import { dataset_dev } from 'svelte/internal';
 
 	let username = '';
 	let password = '';
 
 	async function handleOnSubmit() {
-		const response = await fetch(import.meta.env.VITE_API_URL + '/user/login', {
+		if (!username || !password) {
+			addToast({
+				message: 'Username/password are required',
+				type: 'error',
+				dismissible: true,
+				timeout: 3000
+			});
+			return;
+		}
+
+		try {
+			const response = await fetch (import.meta.env.VITE_API_URL + '/user/login', {
+				method: 'POST',
+				headers: {'Content-Type': 'application/json'},
+				body: JSON.stringify({
+					username: username,
+					password: password
+				})
+
+			});
+
+			const data = await response.json()
 			
-		})
+			if (!response.ok) {
+				throw new Error(data.message || 'Failed to Login');
+			}
+
+			$user = {
+				isLogged: true,
+				isAdmin: data.user?.role === 'admin',
+				username: username,
+				token: data.token
+			};
+
+			window.localStorage.setItem('auth', JSON.stringify($user));
+
+			goto('/');
+
+		} catch (error) {
+			addToast({
+				message:'Error on the server connection',
+				type:'error',
+				dismissible:true,
+				timeout:3000
+			});
+		}
 		
 	}
 </script>
