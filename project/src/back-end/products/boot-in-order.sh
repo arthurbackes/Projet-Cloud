@@ -1,24 +1,4 @@
 #!/bin/bash -
-#===============================================================================
-#
-#          FILE: boot-in-order.sh
-#
-#         USAGE: ./boot-in-order.sh
-#
-#   DESCRIPTION:
-#     Waits until the daemon of CouchDB starts to create a database. The
-#     environment variable DB_URL contains more details of such DB
-#     (name, authentication information of administrator, etc).
-#       OPTIONS: ---
-#  REQUIREMENTS: This script makes use of the environment variables WITH_PERSISTENT_DATA,
-#     DB_NAME and DB_URL, be sure that such variables were defined before running this script.
-#          BUGS: ---
-#         NOTES: ---
-#        AUTHOR: Raziel Carvajal-Gomez (), raziel.carvajal@uclouvain.be
-#  ORGANIZATION:
-#       CREATED: 10/08/2018 09:20
-#      REVISION:  ---
-#===============================================================================
 if [ "${WITH_PERSISTENT_DATA}" != "" ]; then
   echo "Wait (indefinitely) until the DB creation (name: ${DB_NAME})."
   echo "The DB URL is: ${DB_URL}"
@@ -27,6 +7,9 @@ if [ "${WITH_PERSISTENT_DATA}" != "" ]; then
     sleep 2
   done
   echo "DB (${DB_NAME}) was created!"
+  while IFS= read -r line; do
+    curl -X POST --data "${line}" -H "Content-Type: application/json" ${DB_URL}
+  done < "seed/product.jsonl"
 fi
-echo "Start users service..."
+echo "Start products service..."
 npm start

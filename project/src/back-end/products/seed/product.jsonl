@@ -1,0 +1,8 @@
+{"_id": "p1","name": "Laptop Dell","price": 1200,"stock": 5,"description": "Laptop Dell XPS 13","category": "Ordinateurs","image": "https://example.com/images/laptop_dell.jpg"}
+{"_id": "p2","name": "Souris sans fil","price": 25,"stock": 12,"description": "Souris sans fil Logitech","category": "Périphériques","image": "https://example.com/images/souris_sans_fil.jpg"}
+{"_id": "p3","name": "Clavier mécanique","price": 80,"stock": 8,"description": "Clavier mécanique RGB","category": "Périphériques","image": "https://example.com/images/clavier_mecanique.jpg"}
+{"_id": "p4","name": "Écran 27 pouces","price": 250,"stock": 3,"description": "Écran 27 pouces 144Hz","category": "Périphériques","image": "https://example.com/images/écran_27_pouces.jpg"}
+{"_id": "p5","name": "Casque audio","price": 150,"stock": 15,"description": "Casque audio sans fil","category": "Périphériques","image": "https://example.com/images/casque_audio.jpg"}
+{"_id": "p6","name": "Webcam HD","price": 60,"stock": 10,"description": "Webcam HD 1080p","category": "Périphériques","image": "https://example.com/images/webcam_hd.jpg"}
+{"_id": "p7","name": "Disque SSD 1To","price": 100,"stock": 20,"description": "Disque SSD 1To","category": "Stockage","image": "https://example.com/images/disque_ssd_1to.jpg"}
+{"_id": "p8","name": "Hub USB-C","price": 35,"stock": 25,"description": "Hub USB-C 4 ports","category": "Périphériques","image": "https://example.com/images/hub_usb-c.jpg"}

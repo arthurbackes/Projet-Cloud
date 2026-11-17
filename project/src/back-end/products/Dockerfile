@@ -8,6 +8,7 @@ ADD package.json .
 RUN npm install
 
 ADD src src
+ADD seed seed
 
 RUN apk update && apk add bash curl
 ADD boot-in-order.sh .
