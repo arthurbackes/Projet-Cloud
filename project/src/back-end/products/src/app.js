@@ -27,4 +27,14 @@ app.post('/api/products', (req, res) => {
         })
 })
 
+app.get('/api/products',(req, res) => {
+    return db.listProducts()
+    .then((list) => {
+        res.status(200).json(list)
+    })
+    .catch((err) => {
+        res.status(500).json({ status: 'error', message: String(err) })
+    })  
+})
+
 module.exports = app

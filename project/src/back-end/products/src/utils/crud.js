@@ -28,6 +28,24 @@ function fetchProduct (product) {
   })
 }
 
+function cleanProd (product) {
+    const {_id,_rev,...other} = product
+    return { id : _id,...other, description : other.description ?? "", image:other.image ?? null}
+}
+
+function listProducts (){
+    const info = {include_docs : true}
+    return new Promise((resolve, reject) => {
+        products.list(info, (error, result) => {
+        if (error) {
+            reject(error)
+            return
+        }
+        resolve(result.rows.map(x => cleanProd(x.doc)))
+    })
+  })
+}
+
 async function createProduct (product) {
   const productDoc = {
     name:product.name,
@@ -42,7 +60,7 @@ async function createProduct (product) {
   return ret
 }
 
-
 module.exports = {
-  createProduct
+  createProduct,
+  listProducts
 }
