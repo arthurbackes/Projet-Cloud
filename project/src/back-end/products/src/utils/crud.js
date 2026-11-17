@@ -28,7 +28,7 @@ function fetchProduct (product) {
   })
 }
 
-function cleanProd (product) {
+function cleanProduct (product) {
     const {_id,_rev,...other} = product
     return { id : _id,...other, description : other.description ?? "", image:other.image ?? null}
 }
@@ -41,9 +41,23 @@ function listProducts (){
             reject(error)
             return
         }
-        resolve(result.rows.map(x => cleanProd(x.doc)))
+        resolve(result.rows.map(x => cleanProduct(x.doc)))
     })
   })
+}
+
+async function getProduct (id) {
+    try {
+        const product = await fetchProduct(id)
+        return cleanProduct(product)
+    } catch(err){
+        if(err.statusCode === 404){
+            const err1 = new Error('Product not found')
+            err1.statusCode = 404
+            throw err1
+        }
+        throw err
+    }
 }
 
 async function createProduct (product) {
@@ -60,7 +74,55 @@ async function createProduct (product) {
   return ret
 }
 
+function destroyProduct(id,rev){
+  return new Promise((resolve, reject) => {
+    products.destroy(id, rev, (error, res) => {
+      if (error) {
+        reject(error)
+        return
+      }
+      resolve(res)
+    })
+  })
+}
+
+async function deleteProduct(id){
+    try {
+        const product = await fetchProduct(id)
+        await destroyProduct(product._id, product._rev)
+    } catch(err){
+        if(err.statusCode === 404){
+            const err1 = new Error('Product not found')
+            err1.statusCode = 404
+            throw err1
+        }
+        throw err
+    }
+}
+
+async function updateProduct(id,change){
+    try {
+        const product = await fetchProduct(id)
+        for(const field in change){
+            product[field] = change[field]
+        }
+        await insertProduct(product)
+        return await cleanProduct(product)
+        
+    } catch(err){
+        if(err.statusCode === 404){
+            const err1 = new Error('Product not found')
+            err1.statusCode = 404
+            throw err1
+        }
+        throw err
+    }
+}
+
 module.exports = {
   createProduct,
-  listProducts
+  listProducts,
+  getProduct,
+  deleteProduct,
+  updateProduct
 }

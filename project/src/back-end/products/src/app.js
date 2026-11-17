@@ -23,7 +23,7 @@ app.post('/api/products', (req, res) => {
         res.status(201).json(createdProduct)
         })
         .catch((err) => {
-        res.status(500).json({ status: 'error', message: String(err) })
+        res.status( 500).json({ status: 'error', message: String(err) })
         })
 })
 
@@ -33,8 +33,49 @@ app.get('/api/products',(req, res) => {
         res.status(200).json(list)
     })
     .catch((err) => {
-        res.status(500).json({ status: 'error', message: String(err) })
+        res.status( 500).json({ status: 'error', message: String(err) })
     })  
+})
+
+app.get('/api/products/:id',(req, res) => {
+    return db.getProduct(req.params.id)
+    .then((product) => {
+        res.status(200).json(product)
+    })
+    .catch((err) => {
+        res.status( err.statusCode ||500).json({ status: 'error', message: err.message })
+    })  
+})
+
+app.delete('/api/products/:id',(req,res)=>{
+    return db.deleteProduct(req.params.id)
+    .then(() => {
+        res.sendStatus(204)
+    })
+    .catch((err) => {
+        res.status( err.statusCode ||500).json({ status: 'error', message: err.message })
+    }) 
+})
+
+app.put('/api/products/:id',(req,res)=>{
+    const champs = ['name','price','stock', 'description','category','image']
+    const changes = {}
+    for (const champ of champs){
+        if(req.body[champ] !== undefined){
+            changes[champ] = req.body[champ]
+        }
+    }
+    const len_change = Object.keys(changes).length
+    if(len_change === 0){
+        return res.status(400).json({status: 'error', message: 'No field to update'})
+    }
+    return db.updateProduct(req.params.id, changes)
+    .then((product) => {
+        res.status(200).json(product)
+    })
+    .catch((err) => {
+        res.status(err.statusCode ||500).json({ status: 'error', message: err.message })
+    })
 })
 
 module.exports = app
