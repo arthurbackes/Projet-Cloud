@@ -15,7 +15,7 @@ function requireAuth(req, res, next) {
         next()
     } catch(error) {
         const status = error.statusCode || 401
-        return res.status(status).json({error: error.message})
+        return res.status(status).json({"status": "error", "message": "Invalid Token"})
     }
 }
 
@@ -23,7 +23,7 @@ function requireAuth(req, res, next) {
 function requireRole(requiredRole) {
     return (req, res, next) => {
         if (!req.user) {
-            return res.status(401).json({"error": "status", "message": 'Authentification required'})
+            return res.status(401).json({"status": "error", "message": 'Authentification required'})
         }
         if (req.user.role !== requiredRole) {
             return res.status(403).json({"status": "error", "message": 'Forbidden'})
