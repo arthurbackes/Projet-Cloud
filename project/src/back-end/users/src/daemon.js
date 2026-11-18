@@ -3,6 +3,7 @@ const logger = require('morgan')
 const bodyParser = require('body-parser')
 const log = require('debug')('users-d')
 const app = require('./app')
+const db = require('./utils/crud')
 
 const server = express()
 server.use(logger('dev'))
@@ -29,11 +30,19 @@ server.use((err, req, res, next) => {
   log(err)
   res.status(err.status || 500)
   res.json({
-    status: 'error'
+    status: 'error',
+    message: ""
   })
 })
 
 const port = process.env.USERS_D_PORT || 80
-server.listen(port, function () {
-  log(`Listening at port ${port}`)
-})
+
+db.createAdmin()
+  .then(() => {
+    server.listen(port, function () {
+      log(`Listening at port ${port}`)
+    })
+  })
+  .catch((error) => {
+    log(error)
+  })

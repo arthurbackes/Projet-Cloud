@@ -26,6 +26,8 @@ services:     # list all services for your application
       - DB_NAME=users
       - DB_URL=http://admin:admin@users-db:5984/users
       - TOKEN_SECRET=${TOKEN_SECRET}
+      - ADMIN_USERNAME=${ADMIN_USERNAME}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD}
     deploy:
       replicas: 1
       restart_policy:

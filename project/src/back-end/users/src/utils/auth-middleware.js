@@ -4,7 +4,7 @@ function requireAuth(req, res, next) {
     const authHeader = req.headers.authorization
 
     if (!authHeader || !authHeader.startsWith('Bearer ')){
-        return res.status(401).json({error: 'Missing or invalid Authorisation header'})
+        return res.status(401).json({"status": "error","message": 'Missing or invalid Authorisation header'})
     }
 
     const token = authHeader.split(' ')[1]
@@ -20,7 +20,7 @@ function requireAuth(req, res, next) {
 }
 
 
-function requireRole(requiredRole) {
+function requireRole(requireRole) {
     return (req, res, next) => {
         if (!req.user) {
             return res.status(401).json({error: 'Authentification required'})
