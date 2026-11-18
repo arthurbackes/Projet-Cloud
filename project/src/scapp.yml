@@ -35,7 +35,6 @@ services:     # list all services for your application
     networks: [ "scapp-net" ]
 
   products-db:
-    # image name
     image: ${DOCKER_ID}/kv-storage-system:latest
     ports: ["3003:5984"]
     volumes:
@@ -55,6 +54,16 @@ services:     # list all services for your application
       - DB_NAME=products
       - DB_URL=http://admin:admin@products-db:5984/products
       - TOKEN_SECRET=${TOKEN_SECRET}
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    networks: [ "scapp-net" ]
+
+  gateway:
+    image: ${DOCKER_ID}/scapp-gateway:latest
+    depends_on: [ "products-daemon", "users-daemon" ]
+    ports: [ "8080:80"]
     deploy:
       replicas: 1
       restart_policy:
