@@ -114,7 +114,51 @@ async function getUser (usrName, passw) {
   }
 }
 
+async function createAdmin () {
+  const usrName = process.env.ADMIN_USERNAME
+  const passw = process.env.ADMIN_PASSWORD
+
+  if (!usrName || !passw) {
+    return
+  }
+
+  try {
+    const userDoc = await fetchUser(usrName)
+    const passMatch = await comparePassword(passw, userDoc.psswhash)
+
+    if (userDoc.role !== 'admin' || !passMatch) {
+      const HashOfPassword = await hashPassword(passw)
+      userDoc.role = 'admin'
+      userDoc.psswhash = HashOfPassword
+      await insertUser(userDoc)
+    }
+  } catch (error) {
+    if (error.statusCode === 404 || error.error === 'not_found') {
+      const HashOfPassword = await hashPassword(passw)
+      const adminDoc = {
+        _id: usrName,
+        type: 'user',
+        username: usrName,
+        role: 'admin',
+        psswhash: HashOfPassword
+      }
+
+      try {
+        await insertUser(adminDoc)
+      } catch (insertError) {
+        if (insertError.statusCode !== 409 && insertError.error !== 'conflict') {
+          throw insertError
+        }
+      }
+      return
+    }
+
+    throw error
+  }
+}
+
 module.exports = {
   createUser,
-  getUser
+  getUser,
+  createAdmin
 }
