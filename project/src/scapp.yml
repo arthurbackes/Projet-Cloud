@@ -30,6 +30,34 @@ services:     # list all services for your application
       restart_policy:
         condition: on-failure
     networks: [ "scapp-net" ]
+
+  products-db:
+    # image name
+    image: ${DOCKER_ID}/kv-storage-system:latest
+    ports: ["3003:5984"]
+    volumes:
+      - products-data:/opt/couchdb/data
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    networks: [ "scapp-net" ]
+  
+  products-daemon:
+    image: ${DOCKER_ID}/scapp-products:latest
+    depends_on: [ "products-db" ]
+    ports: [ "3002:80" ]
+    environment:
+      - WITH_PERSISTENT_DATA=Y 
+      - DB_NAME=products
+      - DB_URL=http://admin:admin@products-db:5984/products
+      - TOKEN_SECRET=${TOKEN_SECRET}
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    networks: [ "scapp-net" ]
+  
   # Docker GUI for swarms
   visualizer:
     image: dockersamples/visualizer:stable
@@ -48,3 +76,4 @@ networks:
   
 volumes:
   users-data:
+  products-data:
