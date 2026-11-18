@@ -15,7 +15,7 @@ function requireAuth(req, res, next) {
         next()
     } catch(error) {
         const status = error.statusCode || 401
-        return res.status(status).json({"status": "error", message: "Invalid Token"})
+        return res.status(status).json({"status": "error", "message": "Invalid Token"})
     }
 }
 
