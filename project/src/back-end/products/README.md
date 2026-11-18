@@ -26,5 +26,3 @@ Un produit ressemble à ceci : `{ id, name, price, stock, category, description,
 Si on ne donne pas description et image, `description` vaut `""` et `image` vaut `null`.
 
 Les erreurs ressemblent à ceci : `{ "status": "error", "message": "..." }`.
-
-Les routes POST, PUT et DELETE demandent un jeton admin dans l'en-tête `Authorization: Bearer <token>` (401 sans jeton valide, 403 si l'utilisateur n'est pas admin). Les GET sont publics.
