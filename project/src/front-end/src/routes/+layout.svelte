@@ -22,7 +22,7 @@
           const payload = JSON.parse(atob(payloadBase64));
           const nowInSeconds = Math.floor(Date.now() / 1000);
 
-          if (payload.exp || payload.exp < nowInSeconds) {
+          if (!payload.exp || payload.exp < nowInSeconds) {
              throw new Error("Token expiré");
           }
 
