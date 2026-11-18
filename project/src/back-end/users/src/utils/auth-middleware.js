@@ -23,10 +23,10 @@ function requireAuth(req, res, next) {
 function requireRole(requiredRole) {
     return (req, res, next) => {
         if (!req.user) {
-            return res.status(401).json({error: 'Authentification required'})
+            return res.status(401).json({"error": "status", "message": 'Authentification required'})
         }
         if (req.user.role !== requiredRole) {
-            return res.status(403).json({error: 'Forbidden'})
+            return res.status(403).json({"status": "error", "message": 'Forbidden'})
         }
         next()
     }
