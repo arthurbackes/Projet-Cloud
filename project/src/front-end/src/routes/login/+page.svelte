@@ -7,41 +7,54 @@
 	let username = '';
 	let password = '';
 
-	function handleOnSubmit() {
-		if (username === 'admin' && password === 'admin') {
-			window.localStorage.setItem('username', 'admin');
-			window.localStorage.setItem('password', 'admin');
-			$user.isLogged = true;
-			$user.isAdmin = true;
-			window.localStorage.setItem('auth', JSON.stringify($user));
-			goto('/');
-			return;
-		}
-		let localUser = window.localStorage.getItem('username');
-		if (localUser && localUser === username) {
-			let localPassw = window.localStorage.getItem('password');
-			if (localPassw === password) {
-				$user.isLogged = true;
-				$user.isAdmin = false;
-				window.localStorage.setItem('auth', JSON.stringify($user));
-				goto('/');
-				return;
-			} else {
-				addToast({
-					message: 'Login error: wrong password',
-					type: 'error',
-					dismissible: true,
-					timeout: 3000
-				});
-			}
-		} else {
+	async function handleOnSubmit() {
+		if (!username || !password) {
 			addToast({
-				message: 'Login error: unknown username',
+				message: 'Username/password are required',
 				type: 'error',
 				dismissible: true,
 				timeout: 3000
 			});
+			return;
 		}
+
+		try {
+			const response = await fetch (import.meta.env.VITE_API_URL + '/user/login', {
+				method: 'POST',
+				headers: {'Content-Type': 'application/json'},
+				body: JSON.stringify({
+					username: username,
+					password: password
+				})
+
+			});
+
+			const data = await response.json()
+			
+			if (!response.ok) {
+				throw new Error(data.message || 'Failed to Login');
+			}
+
+			$user = {
+				isLogged: true,
+				isAdmin: data.user?.role === 'admin',
+				username: username,
+				token: data.token
+			};
+
+			window.localStorage.setItem('auth', JSON.stringify($user));
+
+			goto('/');
+
+		} catch (error) {
+			addToast({
+				message:'Error on the server connection',
+				type:'error',
+				dismissible:true,
+				timeout:3000
+			});
+		}
+		
 	}
 </script>
 

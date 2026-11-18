@@ -4,29 +4,57 @@ const log = require('debug')('users-d')
 const app = express.Router()
 const db = require('./utils/crud')
 
+function sendError (res, error) {
+  const status = error.statusCode || 500
+  return res.status(status).json({ status: 'error', message: error.message })
+}
+
 app.post('/user', (req, res) => {
   var usr = req.body.username
   var usrPassw = req.body.password
-  log(`Creating a new user (${usr}) identified with "${usrPassw}"`)
-  return db.createUser(usr, usrPassw)
-    .then((token) => {
-      res.status(200).json({ status: 'success', token })
+
+  if (!usr || !usrPassw) {
+    return res.status(400).json({
+      status: 'error',
+      message: 'Username and password are required !'
     })
-    .catch((err) => {
-      res.status(500).json({ status: 'error', message: String(err) })
+  }
+
+  log(`Creating a new user (${usr})"`)
+  return db.createUser(usr, usrPassw)
+    .then((result) => {
+      res.status(201).json({
+         status: 'success', 
+         token : result.token,
+         user : result.user
+        })
+    })
+    .catch((error) => {
+      sendError(res, error)
     })
 })
 
-app.get('/user/:username/:password', (req, res) => {
-  var usr = req.params.username
-  var passw = req.params.password
+app.post('/user/login', (req, res) => {
+  var usr = req.body.username
+  var passw = req.body.password
+  if (!usr || !passw) {
+    return res.status(400).json({
+      status: 'error',
+      message: 'Username and password are required !'
+    })
+  }
+
   log(`Getting user (${usr})`)
   return db.getUser(usr, passw)
-    .then((token) => {
-      res.status(200).json({ status: 'success', token })
+    .then((result) => {
+      res.status(200).json({
+         status: 'success', 
+         token : result.token,
+         user : result.user
+        })
     })
-    .catch((err) => {
-      res.status(404).json({ status: 'error', message: String(err) })
+    .catch((error) => {
+      sendError(res, error)
     })
 })
 

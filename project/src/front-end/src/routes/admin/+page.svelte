@@ -15,7 +15,16 @@
 	} from 'flowbite-svelte';
 
 	import { products, productsMerged } from '@stores/products';
+	import { browser } from '$app/environment';
+	import { goto } from '$app/navigation';
+	import { user } from '../../stores/auth';
 	import Modal from '@interfaces/misc/Modal.svelte';
+
+
+
+	$: if (browser && (!$user.isLogged || !$user.isAdmin)) {
+		goto('/')
+	}
 
 	let modalProduct = null;
 	let searchTerm = '';

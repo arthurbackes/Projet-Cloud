@@ -14,8 +14,26 @@
     // Initialize stored auth session
     let localUser = window.localStorage.getItem("auth");
     if (localUser) {
-      console.log(JSON.parse(localUser));
-      $user = JSON.parse(localUser);
+      try {
+        const parsedUser = JSON.parse(localUser);
+        
+        if (parsedUser && parsedUser.token) {
+          const payloadBase64 = parsedUser.token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+          const payload = JSON.parse(atob(payloadBase64));
+          const nowInSeconds = Math.floor(Date.now() / 1000);
+
+          if (payload.exp || payload.exp < nowInSeconds) {
+             throw new Error("Token expiré");
+          }
+
+          $user = parsedUser;
+        }
+      } catch (error) {
+        console.warn("Session invalide ou expirée, nettoyage...");
+        window.localStorage.removeItem("auth");
+        $user.isLogged = false;
+        $user.isAdmin = false;
+      }
     }
 
     // Initialize cart
@@ -29,8 +47,7 @@
   });
 
   function logout() {
-    $user.isLogged = false;
-    $user.isAdmin = false;
+    $user = { isLogged: false, isAdmin: false, username: '', token: null}
     window.localStorage.removeItem("auth");
     goto("/");
   }
