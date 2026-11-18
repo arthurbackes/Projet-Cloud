@@ -4,7 +4,10 @@ const log = require('debug')('products-d')
 const app = express.Router()
 const db = require('./utils/crud')
 
-app.post('/api/products', (req, res) => {
+const {requireAuth} = require('./utils/auth-middleware')
+const {requireRole} = require('./utils/auth-middleware')
+
+app.post('/api/products', requireAuth, requireRole('admin'), (req, res) => {
     var product = {
         name : req.body.name,
         price : req.body.price,
@@ -51,7 +54,7 @@ app.get('/api/products/:id',(req, res) => {
     })  
 })
 
-app.delete('/api/products/:id',(req,res)=>{
+app.delete('/api/products/:id', requireAuth, requireRole('admin'), (req,res)=>{
     return db.deleteProduct(req.params.id)
     .then(() => {
         res.sendStatus(204)
@@ -61,7 +64,7 @@ app.delete('/api/products/:id',(req,res)=>{
     }) 
 })
 
-app.put('/api/products/:id',(req,res)=>{
+app.put('/api/products/:id', requireAuth, requireRole('admin'), (req,res)=>{
     const champs = ['name','price','stock', 'description','category','image']
     const changes = {}
     for (const champ of champs){
