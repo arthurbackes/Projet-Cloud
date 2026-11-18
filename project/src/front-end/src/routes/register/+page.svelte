@@ -1,15 +1,47 @@
 <script>
-	import { user } from '../../stores/auth';
-	import { goto } from '$app/navigation';
-	let username = '';
-	let password = '';
-	function handleOnSubmit() {
-		$user.isLogged = true;
-		window.localStorage.setItem('auth', JSON.stringify($user));
-		window.localStorage.setItem('username', username);
-		window.localStorage.setItem('password', password);
-		goto('/');
-	}
+    import { user } from '../../stores/auth';
+    import { goto } from '$app/navigation';
+    import { addToast } from '../../stores/toasts'; // On réutilise les notifications de ton projet
+
+    let username = '';
+    let password = '';
+
+    async function handleOnSubmit() {
+        if (!username || !password) {
+            addToast({ message: 'Username/password are required', type: 'error', dismissible: true, timeout: 3000 });
+            return;
+        }
+
+        try {
+            const response = await fetch (import.meta.env.VITE_API_URL + '/user', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ username: username, password: password })
+            });
+
+            const data = await response.json();
+            
+            if (!response.ok) {
+                throw new Error(data.message || 'Registration failed');
+            }
+
+            $user = {
+                isLogged: true,
+                isAdmin: data.user?.role === 'admin',
+                username: username,
+                token: data.token
+            };
+
+            window.localStorage.setItem('auth', JSON.stringify($user));
+
+            addToast({ message: 'Account created successfully!', type: 'success', dismissible: true, timeout: 3000 });
+            goto('/');
+
+        } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : 'Error on the server connection';
+            addToast({ message: errorMessage, type: 'error', dismissible: true, timeout: 3000 });
+        }
+    }
 </script>
 
 <form method="POST" on:submit|preventDefault={handleOnSubmit}>

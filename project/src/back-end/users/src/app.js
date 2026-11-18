@@ -22,8 +22,12 @@ app.post('/user', (req, res) => {
 
   log(`Creating a new user (${usr})"`)
   return db.createUser(usr, usrPassw)
-    .then((token) => {
-      res.status(201).json({ status: 'success', token })
+    .then((result) => {
+      res.status(201).json({
+         status: 'success', 
+         token : result.token,
+         user : result.user
+        })
     })
     .catch((error) => {
       sendError(res, error)
@@ -42,8 +46,12 @@ app.post('/user/login', (req, res) => {
 
   log(`Getting user (${usr})`)
   return db.getUser(usr, passw)
-    .then((token) => {
-      res.status(200).json({ status: 'success', token })
+    .then((result) => {
+      res.status(200).json({
+         status: 'success', 
+         token : result.token,
+         user : result.user
+        })
     })
     .catch((error) => {
       sendError(res, error)

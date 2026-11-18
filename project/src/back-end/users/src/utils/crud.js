@@ -67,7 +67,14 @@ async function createUser (usrName, passw) {
   }
   try {
     await insertUser(userDoc)
-    return tku.encodeToken(usrName, userDoc.role)
+    return {
+      token: tku.encodeToken(usrName, userDoc.role),
+      user : {
+        username: usrName,
+        role : userDoc.role
+      }
+
+    }
   } catch (error) {
     if (error.statusCode === 409 || error.error === 'conflict') {
       const conflictError = new Error(`User ${usrName} already exists`)
@@ -89,7 +96,13 @@ async function getUser (usrName, passw) {
       authenticationError.statusCode = 401
       throw authenticationError
     }
-    return tku.encodeToken(usrName, userDoc.role)
+    return {
+      token: tku.encodeToken(usrName, userDoc.role),
+      user : {
+        username: usrName,
+        role : userDoc.role
+      }
+    }
   } catch (error) {
     if (error.statusCode === 404 || error.error === 'not_found') {
       const authenticationError = new Error('Invalid username or password')
