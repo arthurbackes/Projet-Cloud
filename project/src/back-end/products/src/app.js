@@ -18,6 +18,10 @@ app.post('/api/products', (req, res) => {
         return res.status(400).json({ status : 'error', message : 'Name, price, category and stock are required'})
     }
 
+    if(typeof product.price !== 'number' || product.price <= 0){
+        return res.status(400).json({status:'error', message:'Price should be > 0'})
+    }
+
     return db.createProduct(product)
         .then((createdProduct) => {
         res.status(201).json(createdProduct)
@@ -62,6 +66,11 @@ app.put('/api/products/:id',(req,res)=>{
     const changes = {}
     for (const champ of champs){
         if(req.body[champ] !== undefined){
+            if(champ == 'price'){
+                if(typeof req.body.price !== 'number' || req.body.price <= 0){
+                    return res.status(400).json({status:'error', message:'Price should be > 0'})
+                }
+            }
             changes[champ] = req.body[champ]
         }
     }
@@ -69,6 +78,7 @@ app.put('/api/products/:id',(req,res)=>{
     if(len_change === 0){
         return res.status(400).json({status: 'error', message: 'No field to update'})
     }
+    
     return db.updateProduct(req.params.id, changes)
     .then((product) => {
         res.status(200).json(product)

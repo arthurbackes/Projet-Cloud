@@ -71,7 +71,8 @@ async function createProduct (product) {
   }
   const res = await insertProduct(productDoc)
   const ret = { ...productDoc, id:res.id}
-  return ret
+  const resfinal = await cleanProduct(ret)
+  return resfinal
 }
 
 function destroyProduct(id,rev){
