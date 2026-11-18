@@ -60,6 +60,32 @@ services:     # list all services for your application
         condition: on-failure
     networks: [ "scapp-net" ]
 
+  shopping-db:
+    image: ${DOCKER_ID}/kv-storage-system:latest 
+    ports: ["3005:5984"]
+    volumes:
+      - shopping-data:/opt/couchdb/data 
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    networks: ["scapp-net"]
+  
+  shopping-daemon:
+    image: ${DOCKER_ID}/scapp-shopping:latest
+    depends_on: ["shopping-db"]
+    ports: ["3004:80"]
+    environment:
+      - WITH_PERSISTENT_DATA=Y 
+      - DB_NAME=shopping 
+      - DB_URL=http://admin:admin@shopping-db:5984/shopping
+      - TOKEN_SECRET=${TOKEN_SECRET}
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    networks: ["scapp-net"]
+
   gateway:
     image: ${DOCKER_ID}/scapp-gateway:latest
     depends_on: [ "products-daemon", "users-daemon" ]
@@ -89,3 +115,4 @@ networks:
 volumes:
   users-data:
   products-data:
+  shopping-data:
