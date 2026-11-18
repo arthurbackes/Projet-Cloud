@@ -20,7 +20,7 @@ function requireAuth(req, res, next) {
 }
 
 
-function requireRole(requireRole) {
+function requireRole(requiredRole) {
     return (req, res, next) => {
         if (!req.user) {
             return res.status(401).json({error: 'Authentification required'})
