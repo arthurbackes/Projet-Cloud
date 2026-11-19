@@ -1,9 +1,11 @@
 import { derived, writable } from 'svelte/store';
+import {getProducts} from '../utils/products.js'
 
 export const products = createProducts();
+export const productsStatus = writable({'loading' : false, 'error' : null})
 
 function createProducts() {
-	const { subscribe, set, update } = writable(staticCatalog());
+	const { subscribe, set, update } = writable({});
 
 	return {
 		subscribe,
@@ -19,77 +21,24 @@ function createProducts() {
 			})
 	};
 }
-function staticCatalog() {
-	return {
-		Vegetables: [
-			{
-				id: 1,
-				name: 'Brocolli',
-				price: 2.73,
-				image:
-					'https://res.cloudinary.com/sivadass/image/upload/v1493620046/dummy-products/broccoli.jpg',
-				category: 'Vegetables'
-			},
-			{
-				id: 2,
-				name: 'Cauliflower',
-				price: 6.3,
-				image:
-					'https://res.cloudinary.com/sivadass/image/upload/v1493620046/dummy-products/cauliflower.jpg',
-				category: 'Vegetables'
-			},
-			{
-				id: 3,
-				name: 'Cucumber',
-				price: 5.6,
-				image:
-					'https://res.cloudinary.com/sivadass/image/upload/v1493620046/dummy-products/cucumber.jpg',
-				category: 'Vegetables'
-			},
-			{
-				id: 4,
-				name: 'Beetroot',
-				price: 8.7,
-				image:
-					'https://res.cloudinary.com/sivadass/image/upload/v1493620045/dummy-products/beetroot.jpg',
-				category: 'Vegetables'
+
+export async function loadProducts() {
+	productsStatus.set({'loading' : true, 'error' : null})
+
+	try {
+		const listProducts = await getProducts()
+		const group = {}
+		for( const prod of listProducts){
+			if(!(prod.category in group)){
+				group[prod.category] = []
 			}
-		],
-		Fruits: [
-			{
-				id: 5,
-				name: 'Apple',
-				price: 2.34,
-				image:
-					'https://res.cloudinary.com/sivadass/image/upload/v1493620045/dummy-products/apple.jpg',
-				category: 'Fruits'
-			},
-			{
-				id: 6,
-				name: 'Banana',
-				price: 1.69,
-				image:
-					'https://res.cloudinary.com/sivadass/image/upload/v1493620045/dummy-products/banana.jpg',
-				category: 'Fruits'
-			},
-			{
-				id: 7,
-				name: 'Grapes',
-				price: 5.98,
-				image:
-					'https://res.cloudinary.com/sivadass/image/upload/v1493620045/dummy-products/grapes.jpg',
-				category: 'Fruits'
-			},
-			{
-				id: 8,
-				name: 'Mango',
-				price: 6.8,
-				image:
-					'https://res.cloudinary.com/sivadass/image/upload/v1493620045/dummy-products/mango.jpg',
-				category: 'Fruits'
-			}
-		]
-	};
+			group[prod.category].push(prod)
+		}
+		products.set(group)
+		productsStatus.set({'loading' : false, 'error' : null})
+	} catch (err) {
+		productsStatus.set({'loading' : false, 'error' : err.message})
+	}
 }
 
 export const productsMerged = derived(products, ($products) => {

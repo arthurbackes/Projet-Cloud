@@ -4,6 +4,7 @@
   import { onMount } from "svelte";
   import { user } from "@stores/auth";
   import { cart } from "@stores/cart";
+  import { loadProducts } from "@stores/products"
   import Toasts from "@interfaces/toasts/Toasts.svelte";
   import Cart from "@interfaces/cart/Cart.svelte";
   import { goto } from "$app/navigation";
@@ -36,13 +37,14 @@
       }
     }
 
+    await loadProducts()
+
     // Initialize cart
     if ($user.isLogged) {
       await cart.loadCart()
     }
 
-    // Initialize local products list
-    // TODO
+
   });
 
   function logout() {
