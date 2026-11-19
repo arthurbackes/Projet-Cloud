@@ -1,8 +1,8 @@
 import { derived, writable } from 'svelte/store';
 import {getProducts} from '../utils/products.js'
+import {error} from './toasts.js'
 
 export const products = createProducts();
-export const productsStatus = writable({'loading' : false, 'error' : null})
 
 function createProducts() {
 	const { subscribe, set, update } = writable({});
@@ -23,8 +23,6 @@ function createProducts() {
 }
 
 export async function loadProducts() {
-	productsStatus.set({'loading' : true, 'error' : null})
-
 	try {
 		const listProducts = await getProducts()
 		const group = {}
@@ -35,9 +33,8 @@ export async function loadProducts() {
 			group[prod.category].push(prod)
 		}
 		products.set(group)
-		productsStatus.set({'loading' : false, 'error' : null})
 	} catch (err) {
-		productsStatus.set({'loading' : false, 'error' : err.message})
+		error("Probleme while loading catalog")
 	}
 }
 
