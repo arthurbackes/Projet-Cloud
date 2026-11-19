@@ -149,40 +149,64 @@ créé au démarrage du service users à partir des variables d'environnement
 
 ### Voir son panier
 *   **Route :** `GET /api/cart`
-*   **Body attendu :** Aucun (le serveur identifie l'utilisateur via le token)
-*   **Réponse Succès (`200 OK`) :**
+*   **Authentification :** `Authorization: Bearer <token>` obligatoire
+*   **Body attendu :** Aucun (l'utilisateur est identifié via le token)
+*   **Réponse Succès (`200 OK`) :** Tableau des articles du panier.
     ```json
-    {
-      "items": [
-        { "productId": "p1", "name": "Laptop Dell", "image": "https://.../p1.jpg", "quantity": 1, "price": 1200 }
-      ],
-      "total": 1200
-    }
+    [
+      {
+        "_id": "p1",
+        "name": "Laptop Dell",
+        "quantity": 1,
+        "price": 1200
+      }
+    ]
     ```
-    Panier vide : `{ "items": [], "total": 0 }` (pas de `404`).
+    Panier vide : `[]` (aucun article). Le serveur ne renvoie pas de `404` pour un panier vide.
+*   **Erreurs possibles :**
+    *   `401 Unauthorized` : Token manquant ou invalide.
+    *   `500 Internal Server Error` : Impossible de récupérer le panier.
 
-### Ajouter / Modifier un produit dans le panier
+### Ajouter un produit au panier
 *   **Route :** `POST /api/cart`
+*   **Authentification :** `Authorization: Bearer <token>` obligatoire
 *   **Body attendu :**
     ```json
     {
-      "productId": "p2",
+      "productID": "p2",
       "quantity": 2
     }
     ```
-    `quantity` **remplace** la quantité actuelle de ce produit dans le panier
-    (si le produit n'y est pas encore, il est ajouté).
-*   **Réponse Succès (`200 OK`) :** Retourne le panier mis à jour (même format que `GET /api/cart`).
+    `quantity` est optionnelle. Si elle n'est pas fournie, le backend utilise `1`.
+    Si le produit existe déjà dans le panier, sa quantité est incrémentée
+    de `quantity`. Sinon, le produit est ajouté.
+*   **Réponse Succès (`200 OK`) :** Retourne directement le tableau du panier mis à jour.
+    ```json
+    [
+      {
+        "_id": "p2",
+        "name": "Nom du produit",
+        "quantity": 2,
+        "price": 100
+      }
+    ]
+    ```
 *   **Erreurs possibles :**
     *   `401 Unauthorized` : Token manquant ou invalide.
     *   `404 Not Found` : Produit inexistant.
-    *   `400 Bad Request` : Stock insuffisant ou quantité inférieure à 1.
+    *   `500 Internal Server Error` : Impossible d'ajouter le produit au panier.
 
 ### Retirer un produit du panier
-*   **Route :** `DELETE /api/cart/:productId`
-*   **Réponse Succès (`200 OK`) :** le panier mis à jour.
+*   **Route :** `DELETE /api/cart/:productID`
+*   **Authentification :** `Authorization: Bearer <token>` obligatoire
+*   **Paramètre d'URL :** `_id` du produit à retirer, transmis sous le nom `productID`.
+*   **Réponse Succès (`200 OK`) :** Retourne directement le tableau du panier mis à jour.
+    ```json
+    []
+    ```
 *   **Erreurs possibles :**
-    *   `404 Not Found` : Produit absent du panier.
+    *   `401 Unauthorized` : Token manquant ou invalide.
+    *   `500 Internal Server Error` : Impossible de retirer le produit du panier.
 
 ---
 
@@ -190,41 +214,62 @@ créé au démarrage du service users à partir des variables d'environnement
 
 ### Valider le panier et créer une commande
 *   **Route :** `POST /api/purchases`
-*   **Body attendu :** Aucun (le serveur vide le panier actuel et crée la commande)
+*   **Authentification :** `Authorization: Bearer <token>` obligatoire
+*   **Body attendu :** Aucun. Le serveur identifie l'utilisateur via le token,
+    vide le panier actuel et crée la commande.
 *   **Réponse Succès (`201 Created`) :**
     ```json
     {
-      "orderId": "o1",
-      "date": "2026-11-09T10:00:00Z",
+      "orderId": "ord_1731168000000",
+      "date": "2026-11-09T10:00:00.000Z",
       "total": 1200,
-      "status": "confirmed"
+      "items": [
+        {
+          "_id": "p1",
+          "name": "Laptop Dell",
+          "quantity": 1,
+          "price": 1200
+        }
+      ]
     }
     ```
 *   **Erreurs possibles :**
     *   `400 Bad Request` : Panier vide.
+    *   `401 Unauthorized` : Token manquant ou invalide.
 *   **Notes :**
-    *   Le prix de chaque article est figé au moment de l'achat.
+    *   `orderId` est généré au format `ord_<timestamp>`.
+    *   Le prix de chaque article est celui enregistré dans le panier.
     *   En cas d'erreur, le panier n'est pas vidé.
-    *   Double validation : le panier étant vide après la première, la
-        seconde renvoie `400` et ne crée pas de deuxième commande.
+    *   Après une première validation réussie, le panier est vide. Une seconde
+        validation renvoie `400 Bad Request` et ne crée pas de deuxième commande.
 
 ### Historique des achats
 *   **Route :** `GET /api/purchases`
+*   **Authentification :** `Authorization: Bearer <token>` obligatoire
 *   **Body attendu :** Aucun
-*   **Réponse Succès (`200 OK`) :**
+*   **Réponse Succès (`200 OK`) :** Tableau des commandes enregistrées.
     ```json
     [
       {
-        "orderId": "o1",
-        "date": "2026-11-09T10:00:00Z",
+        "orderId": "ord_1731168000000",
+        "date": "2026-11-09T10:00:00.000Z",
         "total": 1200,
         "items": [
-          { "productId": "p1", "name": "Laptop Dell", "image": "https://.../p1.jpg", "quantity": 1, "price": 1200 }
+          {
+            "_id": "p1",
+            "name": "Laptop Dell",
+            "quantity": 1,
+            "price": 1200
+          }
         ]
       }
     ]
     ```
-    Trié du plus récent au plus ancien, `[]` si aucun achat.
+    Aucun achat : `[]`. Le backend ne retourne pas les achats dans un objet
+    contenant un champ supplémentaire.
+*   **Erreurs possibles :**
+    *   `401 Unauthorized` : Token manquant ou invalide.
+    *   `500 Internal Server Error` : Impossible de récupérer l'historique.
 
 ---
 

@@ -37,9 +37,8 @@
     }
 
     // Initialize cart
-    let localCart = window.localStorage.getItem("cart");
-    if (localCart) {
-      $cart = JSON.parse(localCart);
+    if ($user.isLogged) {
+      await cart.loadCart()
     }
 
     // Initialize local products list
@@ -49,6 +48,7 @@
   function logout() {
     $user = { isLogged: false, isAdmin: false, username: '', token: null}
     window.localStorage.removeItem("auth");
+    cart.set([])
     goto("/");
   }
 </script>

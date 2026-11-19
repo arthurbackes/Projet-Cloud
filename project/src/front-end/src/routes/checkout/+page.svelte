@@ -2,26 +2,29 @@
 	import { totalPrice, totalQuantity } from '@stores/cart';
 	import { cart } from '@stores/cart';
 	import { onMount } from 'svelte';
+    import { fetchWithAuth } from '../../utils/api';
 
-	let prevCheckout: any[];
+	let prevCheckout: any[] = [];
+
+	async function loadPurchase() {
+		const res = await fetchWithAuth('/api/purchases')
+		if (res.ok) {
+			prevCheckout = await res.json()
+		}
+	}
 
 	onMount(async () => {
-		prevCheckout = JSON.parse(window.localStorage.getItem('checkout')) || [];
+		await loadPurchase()
 	});
 
-	function handleCheckout() {
-		let checkout = {
-			items: $cart,
-			extras: {
-				totalQuantity: $totalQuantity,
-				totalPrice: $totalPrice,
-				date: new Date().toLocaleDateString('fr')
-			}
-		};
-		prevCheckout = [...prevCheckout, checkout];
-		window.localStorage.setItem('checkout', JSON.stringify(prevCheckout));
-		window.sessionStorage.removeItem('cart');
-		cart.update((old) => []);
+	async function handleCheckout() {
+		const res = await fetchWithAuth('/api/purchases', {
+			method: 'POST',
+		})
+		if (res.ok) {
+			cart.set([])
+			await loadPurchase()
+		}
 	}
 </script>
 
@@ -45,8 +48,7 @@
 				<ul class="list-group mb-3">
 					{#if $cart.length > 0}
 						{#each $cart as item}
-							<li class="list-group-item grid grid-flow-row-dense grid-cols-4 lh-sm">
-								<img class="object-contain h-10 w-10" src={item.image} alt={item.name} />
+							<li class="list-group-item grid grid-flow-row-dense grid-cols-3 lh-sm">
 								<div class="m-auto">{item.name}</div>
 								<span class="text-body-secondary text-gray-500 m-auto">{item.quantity}</span>
 								<span class="text-body-secondary text-gray-500 m-auto"
@@ -69,12 +71,11 @@
 			<div class="col-md-6 col-lg-7">
 				<h1 class="text-2xl mb-3 text-center">Purchase history</h1>
 				<ul class="list-group mb-3">
-					{#if prevCheckout}
+					{#if prevCheckout.length > 0}
 						{#each prevCheckout as checkout}
 							<li class="list-group-item grid grid-flow-row-dense grid-cols-2 lh-sm">
 								{#each checkout.items as item}
 									<div class="m-auto flex justify-end w-full">
-										<img class="object-contain h-10 w-10" src={item.image} alt={item.name} />
 										<span class="my-auto">
 											{item.quantity} x
 											{item.name}</span
@@ -84,11 +85,11 @@
 										>${item.price * item.quantity}</span
 									>
 								{/each}
-								<div class="m-auto w-full pt-2 col-auto">Total: ${checkout.extras.totalPrice}</div>
+								<div class="m-auto w-full pt-2 col-auto">Total: ${checkout.total}</div>
 							</li>
 						{/each}
 					{:else}
-						<li class="list-group-item grid grid-flow-row-dense lh-sm">Your cart is empty</li>
+						<li class="list-group-item grid grid-flow-row-dense lh-sm">No previus purchases</li>
 					{/if}
 				</ul>
 			</div>
