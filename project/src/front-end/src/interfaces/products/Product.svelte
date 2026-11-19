@@ -7,21 +7,22 @@
   let showModal = false;
 
   interface Product {
-    id: number;
+    _id?: string;
+    id?: number | string;
     name: string;
     price: number;
     image: string;
-    category: String;
+    category: string;
   }
+
   export let product: Product;
 
   let quantity: number = 0;
-  function addToCart() {
-    cart.addToCart({ ...product, quantity });
-    quantity = 0;
-
-    success("Added item to cart");
-    window.localStorage.setItem("cart", JSON.stringify($cart));
+  async function addToCart() {
+    const productID = product._id ?? String(product.id)
+    await cart.addToCart(productID, quantity)
+    quantity = 0
+    success("item added to cart")
   }
 </script>
 

@@ -24,19 +24,23 @@
 		<table class="table-auto text-center">
 			<thead>
 				<tr>
-					<th />
 					<th>Item</th>
 					<th>Quantity</th>
 					<th>Total price</th>
+					<th />
 				</tr>
 			</thead>
 			<tbody>
 				{#each $cart as item}
 					<tr>
-						<td><img class="h-14 w-14" src={item.image} alt={item.name} /></td>
 						<td>{item.name}</td>
 						<td>{item.quantity}</td>
 						<td>{item.price * item.quantity}$</td>
+						<td>
+							<button type="button" class="btn btn-sm btn-outline-danger" on:click={() => cart.removeFromCart(item._id)}>
+								x
+							</button>
+						</td>
 					</tr>
 				{/each}
 			</tbody>
