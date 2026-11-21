@@ -17,7 +17,7 @@ app.get('/api/cart/ping', (req, res) => {
 
 app.get('/api/cart', requireAuth, async (req, res) => {
     try {
-        const data = await crud.getUserData(req.user.username)
+        const data = await crud.getUserData(req.user.sub)
         res.json(data.cart)
     } catch (error) {
         res.status(500).json({"status": "error", "message": "Cart not found"})
@@ -27,7 +27,7 @@ app.get('/api/cart', requireAuth, async (req, res) => {
 
 app.get('/api/purchases', requireAuth, async (req, res) => {
     try {
-        const data = await crud.getUserData(req.user.username)
+        const data = await crud.getUserData(req.user.sub)
         res.json(data.purchases)
     } catch (error) {
         res.status(500).json({"status": "error", "message": "Order history not found"})
@@ -37,12 +37,13 @@ app.get('/api/purchases', requireAuth, async (req, res) => {
 
 app.post('/api/cart', requireAuth, async (req, res) => {
     try {
+        console.log("hello")
         const {productID, quantity } = req.body
         const response = await fetch(`http://products-daemon:80/api/products/${productID}`)
         if (!response.ok) return res.status(404).json({ "status":"error", "message": "Product not found" })
         const product = await response.json()
-
-        const cart = await crud.addToCart(req.user.username, {
+        console.log('REQ.USER:', req.user)
+        const cart = await crud.addToCart(req.user.sub, {
             _id: productID,
             name: product.name,
             price: product.price,
@@ -52,13 +53,14 @@ app.post('/api/cart', requireAuth, async (req, res) => {
 
     } catch (error) {
         res.status(500).json({"status": "error", "message": "Failed to add to cart"})
+        console.error(error)
     }
 })
 
 
 app.delete('/api/cart/:productID', requireAuth, async (req, res) => {
     try {
-        const cart = await crud.removeFromCart(req.user.username, req.params.productID)
+        const cart = await crud.removeFromCart(req.user.sub, req.params.productID)
         res.json(cart)
     } catch (error) {
         res.status(500).json({"status": "error", "message": "Failed to remove from cart"})
@@ -68,7 +70,7 @@ app.delete('/api/cart/:productID', requireAuth, async (req, res) => {
 
 app.post('/api/purchases', requireAuth, async (req, res) => {
     try {
-        const order = await crud.checkout(req.user.username)
+        const order = await crud.checkout(req.user.sub)
         res.status(201).json(order)
     } catch (error) {
         res.status(400).json({"status": "error", "message": "failed to validate order"})

@@ -1,4 +1,4 @@
-const db = require('nano')(process.env.DB_URL)
+const db = require('nano')(process.env.DB_URL.replace('/shopping', '')).use('shopping')
 
 async function getUserData(username) {
     try {
