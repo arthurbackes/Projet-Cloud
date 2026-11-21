@@ -13,6 +13,7 @@
     price: number;
     image: string;
     category: string;
+    description: string;
   }
 
   export let product: Product;
@@ -90,7 +91,7 @@
       <div class="container">
         <img class="card-img-top" src={product.image} alt={product.name} />
         <h2 class="text-lg">About the product</h2>
-        <p>TODO: write down small description...</p>
+        <p>{product.description}</p>
         <br />
         <hr class="mb-3" />
         <h3>Customers who bought this item also bought</h3>
